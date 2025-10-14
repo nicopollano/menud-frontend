@@ -1,0 +1,238 @@
+@import 'tailwindcss';
+@source "../../../apps/**/*.{ts,tsx}";
+@source "../../../components/**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme {
+  /* Typography */
+  --text-*: initial;
+
+  --text-heading-desktop-1: 3rem;
+  --text-heading-desktop-1--line-height: 3.5rem;
+  --text-heading-desktop-1--letter-spacing: 0%;
+  --text-heading-desktop-1--font-weight: 600;
+  --text-heading-desktop-2: 2.25rem;
+  --text-heading-desktop-2--line-height: 3rem;
+  --text-heading-desktop-2--letter-spacing: 0%;
+  --text-heading-desktop-2--font-weight: 600;
+  --text-heading-desktop-3: 1.75rem;
+  --text-heading-desktop-3--line-height: 2.25rem;
+  --text-heading-desktop-3--letter-spacing: 0%;
+  --text-heading-desktop-3--font-weight: 600;
+  --text-heading-desktop-4: 1.25rem;
+  --text-heading-desktop-4--line-height: 1.75rem;
+  --text-heading-desktop-4--letter-spacing: 0%;
+  --text-heading-desktop-4--font-weight: 600;
+
+  --text-heading-mobile-1: 1.5rem;
+  --text-heading-mobile-1--line-height: 2rem;
+  --text-heading-mobile-1--letter-spacing: 0%;
+  --text-heading-mobile-1--font-weight: 600;
+  --text-heading-mobile-2: 1.25rem;
+  --text-heading-mobile-2--line-height: 1.5rem;
+  --text-heading-mobile-2--letter-spacing: 0%;
+  --text-heading-mobile-2--font-weight: 600;
+  --text-heading-mobile-3: 1.125rem;
+  --text-heading-mobile-3--line-height: 1.5rem;
+  --text-heading-mobile-3--letter-spacing: 0%;
+  --text-heading-mobile-3--font-weight: 600;
+  --text-heading-mobile-4: 1rem;
+  --text-heading-mobile-4--line-height: 1.5rem;
+  --text-heading-mobile-4--letter-spacing: 0%;
+  --text-heading-mobile-4--font-weight: 600;
+
+  --text-body-desktop-1: 1rem;
+  --text-body-desktop-1--line-height: 1.5rem;
+  --text-body-desktop-1--letter-spacing: 0%;
+  --text-body-desktop-1--font-weight: 400;
+  --text-body-desktop-2: 0.875rem;
+  --text-body-desktop-2--line-height: 1.5rem;
+  --text-body-desktop-2--letter-spacing: 0%;
+  --text-body-desktop-2--font-weight: 400;
+  --text-body-desktop-3: 0.75rem;
+  --text-body-desktop-3--line-height: 1.5rem;
+  --text-body-desktop-3--letter-spacing: 0%;
+  --text-body-desktop-3--font-weight: 400;
+  --text-body-desktop-4: 0.625rem;
+  --text-body-desktop-4--line-height: 1.5rem;
+  --text-body-desktop-4--letter-spacing: 0%;
+  --text-body-desktop-4--font-weight: 400;
+
+  --text-body-desktop-1: 1.75rem;
+  --text-body-desktop-1--line-height: 2.25rem;
+  --text-body-desktop-1--letter-spacing: 0%;
+  --text-body-desktop-1--font-weight: 400;
+  --text-body-desktop-2: 1.25rem;
+  --text-body-desktop-2--line-height: 1.75rem;
+  --text-body-desktop-2--letter-spacing: 0%;
+  --text-body-desktop-2--font-weight: 400;
+  --text-body-desktop-3: 1.125rem;
+  --text-body-desktop-3--line-height: 1.5rem;
+  --text-body-desktop-3--letter-spacing: 0%;
+  --text-body-desktop-3--font-weight: 400;
+  --text-body-desktop-4: 1rem;
+  --text-body-desktop-4--line-height: 1.25rem;
+  --text-body-desktop-4--letter-spacing: 0%;
+  --text-body-desktop-4--font-weight: 400;
+
+  --text-body-mobile-1: 1.125rem;
+  --text-body-mobile-1--line-height: 1.5rem;
+  --text-body-mobile-1--letter-spacing: 0%;
+  --text-body-mobile-1--font-weight: 400;
+  --text-body-mobile-2: 1rem;
+  --text-body-mobile-2--line-height: 1.25rem;
+  --text-body-mobile-2--letter-spacing: 0%;
+  --text-body-mobile-2--font-weight: 400;
+  --text-body-mobile-3: 0.875rem;
+  --text-body-mobile-3--line-height: 1.25rem;
+  --text-body-mobile-3--letter-spacing: 0%;
+  --text-body-mobile-3--font-weight: 400;
+  --text-body-mobile-4: 0.75rem;
+  --text-body-mobile-4--line-height: 1rem;
+  --text-body-mobile-4--letter-spacing: 0%;
+  --text-body-mobile-4--font-weight: 400;
+
+  --text-button-desktop-normal: 1.125rem;
+  --text-button-desktop-normal--line-height: 1.5rem;
+  --text-button-desktop-normal--letter-spacing: 0%;
+  --text-button-desktop-normal--font-weight: 600;
+  --text-button-desktop-medium: 1rem;
+  --text-button-desktop-medium--line-height: 1.25rem;
+  --text-button-desktop-medium--letter-spacing: 0%;
+  --text-button-desktop-medium--font-weight: 600;
+  --text-button-desktop-small: 0.875rem;
+  --text-button-desktop-small--line-height: 1.25rem;
+  --text-button-desktop-small--letter-spacing: 0%;
+  --text-button-desktop-small--font-weight: 600;
+
+  --text-button-mobile-normal: 1rem;
+  --text-button-mobile-normal--line-height: 1.25rem;
+  --text-button-mobile-normal--letter-spacing: 0%;
+  --text-button-mobile-normal--font-weight: 600;
+  --text-button-mobile-medium: 0.875rem;
+  --text-button-mobile-medium--line-height: 1.25rem;
+  --text-button-mobile-medium--letter-spacing: 0%;
+  --text-button-mobile-medium--font-weight: 600;
+  --text-button-mobile-small: 0.75rem;
+  --text-button-mobile-small--line-height: 1rem;
+  --text-button-mobile-small--letter-spacing: 0%;
+  --text-button-mobile-small--font-weight: 600;
+
+  /* Colors */
+  --color-*: initial;
+  --color-background: #ffffff;
+  --color-primary: #ff852d;
+  --color-secondary: #ffecd4;
+  --color-text: #080808;
+  --color-gray: #b6b6b6;
+  --color-gray-light: #f2f2f2;
+  --color-gray-dark: #808080;
+  --color-error: #b5210b;
+  --color-error-200: #ffcbc3;
+  --color-warning: #ffae42;
+  --color-success: #1db954;
+
+  /* Borders */
+  --radius-*: initial;
+  --radius-inherit: inherit;
+  --radius-xs: 0.625rem;
+  --radius-sm: 0.9375rem;
+  --radius-full: 624.9375rem;
+
+  /* Shadows */
+  --shadow-tab: 0rem 0.25rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
+
+  /* Breakpoints */
+  --breakpoint-360: 22.5rem; /* 360px */
+  --breakpoint-430: 26.875rem; /* 430px */
+
+  /* Rotate */
+  --rotate-30: 30deg;
+  --rotate-150: 150deg;
+
+  /* Gradients */
+  --gradient-eclipse: 180deg, #fff 45.67%, #ffe1cc 100%;
+}
+
+@theme inline {
+  --font-poppins: var(--font-poppins);
+  --font-roboto: var(--font-roboto);
+  --font-maven-pro: var(--font-maven-pro);
+  --font-lato: var(--font-lato);
+  --font-pompiere: var(--font-pompiere);
+  --font-salsa: var(--font-salsa);
+  --font-niconne: var(--font-niconne);
+  --font-baloo-tammudu-2: var(--font-baloo-tammudu-2);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text;
+  }
+
+  button[type='button'] {
+    @apply cursor-pointer;
+  }
+
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear,
+  input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none;
+  }
+
+  input[type="password"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+}

@@ -1,0 +1,3 @@
+{
+  "extends": "@ristokit/typescript-config/base.json"
+}

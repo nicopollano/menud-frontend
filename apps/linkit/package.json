@@ -1,0 +1,32 @@
+{
+  "name": "linkit",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint && biome check --no-errors-on-unmatched --files-ignore-unknown=true",
+    "lint:fix": "next lint --fix && biome check --write --unsafe --no-errors-on-unmatched --files-ignore-unknown=true",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ristokit/shared": "workspace:*",
+    "@ristokit/ui": "workspace:*",
+    "@t3-oss/env-nextjs": "^0.13.4",
+    "jiti": "^2.4.2",
+    "next": "^15.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@ristokit/eslint-config": "workspace:^",
+    "@ristokit/typescript-config": "workspace:*",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5.7.3"
+  }
+}

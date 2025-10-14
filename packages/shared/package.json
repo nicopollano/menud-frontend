@@ -1,0 +1,27 @@
+{
+  "name": "@ristokit/shared",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --max-warnings 0 && biome check --no-errors-on-unmatched --files-ignore-unknown=true",
+    "lint:fix": "eslint . --max-warnings 0 --fix && biome check --write --unsafe --no-errors-on-unmatched --files-ignore-unknown=true"
+  },
+  "devDependencies": {
+    "@ristokit/eslint-config": "workspace:*",
+    "@ristokit/typescript-config": "workspace:*",
+    "@turbo/gen": "^2.4.2",
+    "@types/node": "^20",
+    "typescript": "^5.7.3"
+  },
+  "exports": {
+    "./components/*": "./src/components/*.tsx",
+    "./lib/*": "./src/lib/*.ts",
+    "./constants/*": "./src/constants/*.ts",
+    "./contexts/*": "./src/contexts/*.tsx",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./models/*": "./src/models/*.ts",
+    "./services/*": "./src/services/*.ts",
+    "./helpers/*": "./src/helpers/*.ts"
+  }
+}

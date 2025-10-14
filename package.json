@@ -1,0 +1,38 @@
+{
+  "name": "ristokit-frontend",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "prepare": "lefthook install",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "dev:admin": "turbo run dev --filter=admin",
+    "dev:menu": "turbo run dev --filter=menu",
+    "dev:web": "turbo run dev --filter=web",
+    "dev:app": "turbo run dev --filter=app",
+    "dev:linkit": "turbo run dev --filter=linkit",
+    "build:admin": "turbo run build --filter=admin",
+    "build:menu": "turbo run build --filter=menu",
+    "build:web": "turbo run build --filter=web",
+    "build:app": "turbo run build --filter=app",
+    "build:linkit": "turbo run build --filter=linkit"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@ristokit/eslint-config": "workspace:*",
+    "@ristokit/typescript-config": "workspace:*",
+    "eslint": "^9.20.1",
+    "lefthook": "^1.11.12",
+    "prettier": "^3.5.1",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "^2.4.4",
+    "typescript": "5.7.3"
+  },
+  "packageManager": "pnpm@10.14.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

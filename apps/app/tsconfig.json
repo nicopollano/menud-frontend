@@ -1,0 +1,27 @@
+{
+  "extends": "@ristokit/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+"skipLibCheck": true,
+    "noEmitOnError": false,
+    "paths": {
+      "@/*": ["./*"],
+      "@ristokit/ui/*": ["../../packages/ui/src/*"],
+      "@/modules/businesses/*": ["./modules/businesses/*"],
+      "@/modules/branches/*": ["./modules/branches/*"],
+      "@/modules/menus/*": ["./modules/menus/*"],
+      "@/modules/categories/*": ["./modules/categories/*"],
+      "@/modules/subcategories/*": ["./modules/subcategories/*"],
+      "@/modules/products/*": ["./modules/products/*"],
+      "@/modules/auth/*": ["./modules/auth/*"],
+      "@/modules/shared/*": ["./modules/shared/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": ["next-env.d.ts", "next.config.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

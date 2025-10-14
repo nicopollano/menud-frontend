@@ -1,0 +1,22 @@
+function MapIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg width='25' height='24' viewBox='0 0 25 24' fill='none' xmlns='http://www.w3.org/2000/svg' {...props}>
+      <path
+        d='M12.5 13C14.1569 13 15.5 11.6569 15.5 10C15.5 8.34315 14.1569 7 12.5 7C10.8431 7 9.5 8.34315 9.5 10C9.5 11.6569 10.8431 13 12.5 13Z'
+        stroke='#080808'
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+      <path
+        d='M12.5 22C16.5 18 20.5 14.4183 20.5 10C20.5 5.58172 16.9183 2 12.5 2C8.08172 2 4.5 5.58172 4.5 10C4.5 14.4183 8.5 18 12.5 22Z'
+        stroke='#080808'
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+    </svg>
+  )
+}
+
+export { MapIcon }
