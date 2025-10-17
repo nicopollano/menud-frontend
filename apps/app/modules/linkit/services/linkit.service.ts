@@ -11,23 +11,28 @@ export const linkitService = {
   async getLinkits(): Promise<Linkit[]> {
     const accessToken = await getAccessToken()
 
-    const request = await fetch(API_V1.LINKITS, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
-
-    const response: ApiResponse<LinkitResponse[]> = await request.json()
-    if (response.error) {
-      throw new ApiError({
-        code: response.error.code,
-        message: response.error.message,
-        details: response.error.details
+    try {
+      const request = await fetch(API_V1.LINKITS, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
       })
-    }
 
-    return linkitsAdapter(response.data)
+      const response: ApiResponse<LinkitResponse[]> = await request.json()
+      if (response.error) {
+        throw new ApiError({
+          code: response.error.code,
+          message: response.error.message,
+          details: response.error.details
+        })
+      }
+
+      return linkitsAdapter(response.data)
+    } catch (err) {
+      // In SSG or CI, convert to ApiError so callers can handle it
+      throw new ApiError({ code: 'FETCH_FAILED', message: String(err) })
+    }
   },
 
   async updateLinkitById(args: UpdateLinkitByIdArgs): Promise<void> {
@@ -56,17 +61,23 @@ export const linkitService = {
 
   async revalidateLinkitByBusinessId(args: BaseLinkitArgs): Promise<void> {
     const { businessId } = args
-
-    const request = await fetch(`${env.NEXT_PUBLIC_LINKIT_DOMAIN}/api/webhooks/revalidate?tag=linkit-${businessId}`, {
-      method: 'GET'
-    })
-
-    const response: { revalidated: boolean; now: number; message: string } = await request.json()
-    if (!response.revalidated) {
-      throw new ApiError({
-        code: 'linkit/revalidate',
-        message: response.message
+    try {
+      const request = await fetch(`${env.NEXT_PUBLIC_LINKIT_DOMAIN}/api/webhooks/revalidate?tag=linkit-${businessId}`, {
+        method: 'GET'
       })
+
+      const response: { revalidated: boolean; now: number; message: string } = await request.json()
+      if (!response.revalidated) {
+        throw new ApiError({
+          code: 'linkit/revalidate',
+          message: response.message
+        })
+      }
+    } catch (err) {
+      // If revalidation endpoint is unreachable, log and throw ApiError so caller can decide
+      // eslint-disable-next-line no-console
+      console.warn('revalidateLinkitByBusinessId failed:', err)
+      throw new ApiError({ code: 'FETCH_FAILED', message: String(err) })
     }
   }
 }

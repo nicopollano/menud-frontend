@@ -31,17 +31,21 @@ export async function getPromotions(args: GetPromotionsArgs): Promise<ApiRespons
 
   const url = buildQueryString(API_V1.BUSINESSES.BRANCHES.PROMOTIONS.BASE(businessId, branchId), params)
 
-  const request = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const r = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const response: ApiResponse<PromotionResponse[]> = await request.json()
-  if (response.error) return response
+    const response: ApiResponse<PromotionResponse[]> = await r.json()
+    if (response.error) return response
 
-  return { ...response, data: promotionsAdapter(response.data) }
+    return { ...response, data: promotionsAdapter(response.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 interface GetPromotionsSummaryArgs {
@@ -57,17 +61,21 @@ export async function getPromotionsSummary(args: GetPromotionsSummaryArgs): Prom
 
   const url = buildQueryString(API_V1.BUSINESSES.BRANCHES.PROMOTIONS.SUMMARY(businessId, branchId), params)
 
-  const request = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const r = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const response: ApiResponse<PromotionsSummaryResponse> = await request.json()
-  if (response.error) return response
+    const response: ApiResponse<PromotionsSummaryResponse> = await r.json()
+    if (response.error) return response
 
-  return { ...response, data: promotionsSummaryAdapter(response.data) }
+    return { ...response, data: promotionsSummaryAdapter(response.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 export const promotionService = {

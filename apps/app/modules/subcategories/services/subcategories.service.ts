@@ -19,18 +19,21 @@ export async function getSubcategories(args: GetSubcategoriesArgs): Promise<ApiR
   const accessToken = await getAccessToken()
 
   const url = buildQueryString(API_V1.BUSINESSES.BRANCHES.SUBCATEGORIES.BASE(businessId, branchId), params)
+  try {
+    const request = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const request = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+    const response: ApiResponse<SubcategoryResponse[]> = await request.json()
+    if (response.error) return response
 
-  const response: ApiResponse<SubcategoryResponse[]> = await request.json()
-  if (response.error) return response
-
-  return { ...response, data: subcategoriesAdapter(response.data) }
+    return { ...response, data: subcategoriesAdapter(response.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 export interface CreateSubCategoryArgs extends CreateSubcategorySchema {

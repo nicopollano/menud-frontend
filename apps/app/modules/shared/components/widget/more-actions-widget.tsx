@@ -4,7 +4,7 @@ import { useToggle } from '@/modules/shared/hooks/use-toggle'
 import { Button } from '@ristokit/ui/components/button'
 import { PlusIcon } from '@ristokit/ui/icons/plus.icon'
 import { cn } from '@ristokit/ui/lib/utils'
-import { AnimatePresence, type Variants, motion } from 'motion/react'
+import { AnimatePresence, type HTMLMotionProps, type Variants, motion } from 'framer-motion'
 
 const drawerVariants: Variants = {
   default: {
@@ -54,18 +54,23 @@ function MoreActionsWidget({ actions }: MoreActionsWidgetProps) {
         )}
       >
         <AnimatePresence>
-          {actions.map(({ id, component: Component }) => (
-            <motion.div
-              key={id}
-              onClick={closeMenu}
-              variants={drawerVariants}
-              initial='default'
-              animate={isOpenMenu ? 'open' : 'default'}
-              exit='close'
-            >
-              <Component />
-            </motion.div>
-          ))}
+          {actions.map(({ id, component: Component }) => {
+            type Props = React.HTMLAttributes<HTMLDivElement> & HTMLMotionProps<'div'>
+            const MotionDiv = motion.div as unknown as React.FC<Props>
+
+            return (
+              <MotionDiv
+                key={id}
+                onClick={closeMenu}
+                variants={drawerVariants}
+                initial='default'
+                animate={isOpenMenu ? 'open' : 'default'}
+                exit='close'
+              >
+                <Component />
+              </MotionDiv>
+            )
+          })}
         </AnimatePresence>
       </div>
       <Button

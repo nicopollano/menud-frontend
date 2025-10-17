@@ -22,17 +22,21 @@ export async function getBranches(args: GetBranchesArgs): Promise<ApiResponse<Br
 
   const accessToken = await getAccessToken()
 
-  const request = await fetch(API_V1.BUSINESSES.BRANCHES.BASE(businessId), {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const r = await fetch(API_V1.BUSINESSES.BRANCHES.BASE(businessId), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const response: ApiResponse<BranchResponse[]> = await request.json()
-  if (response.error) return response
+    const response: ApiResponse<BranchResponse[]> = await r.json()
+    if (response.error) return response
 
-  return { ...response, data: branchesAdapter(response.data) }
+    return { ...response, data: branchesAdapter(response.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 interface GetBranchByIdArgs extends GetBranchesArgs {
@@ -44,17 +48,21 @@ export async function getBranchById(args: GetBranchByIdArgs): Promise<ApiRespons
 
   const accessToken = await getAccessToken()
 
-  const request = await fetch(API_V1.BUSINESSES.BRANCHES.BRANCH.BASE(businessId, branchId), {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const r = await fetch(API_V1.BUSINESSES.BRANCHES.BRANCH.BASE(businessId, branchId), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const response: ApiResponse<BranchResponse> = await request.json()
-  if (response.error) return response
+    const response: ApiResponse<BranchResponse> = await r.json()
+    if (response.error) return response
 
-  return { ...response, data: branchAdapter(response.data) }
+    return { ...response, data: branchAdapter(response.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 interface GetBranchesSummaryArgs {
@@ -66,17 +74,21 @@ export async function getBranchesSummary(args: GetBranchesSummaryArgs): Promise<
 
   const accessToken = await getAccessToken()
 
-  const request = await fetch(API_V1.BUSINESSES.BRANCHES.SUMMARY(businessId), {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const r = await fetch(API_V1.BUSINESSES.BRANCHES.SUMMARY(businessId), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const response: ApiResponse<BranchesSummaryResponse> = await request.json()
-  if (response.error) return response
+    const response: ApiResponse<BranchesSummaryResponse> = await r.json()
+    if (response.error) return response
 
-  return { ...response, data: branchesSummaryAdapter(response.data) }
+    return { ...response, data: branchesSummaryAdapter(response.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 export async function createBranch(args: CreateBranchSchema): Promise<ApiResponse<Branch>> {

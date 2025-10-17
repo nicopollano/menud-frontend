@@ -1,6 +1,6 @@
 'use client'
 import { fadeInVariants } from '@/lib/motion/motion.variant'
-import { motion } from 'motion/react'
+import { motion } from 'framer-motion'
 
 interface ProfileTemplateProps {
   children: React.ReactNode

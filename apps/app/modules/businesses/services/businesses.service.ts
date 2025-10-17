@@ -15,20 +15,34 @@ import type {
   BusinessesSummaryResponse
 } from '@ristokit/shared/models/business.model'
 
+async function safeFetchJson<T>(input: RequestInfo, init?: RequestInit) {
+  try {
+    const res = await fetch(input, init)
+    return (await res.json()) as T
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.warn('safeFetchJson failed for', input, err)
+    throw err
+  }
+}
+
 export async function getBusinesses(): Promise<ApiResponse<Business[]>> {
   const accessToken = await getAccessToken()
 
-  const request = await fetch(API_V1.BUSINESSES.BASE, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const response: ApiResponse<BusinessResponse[]> = await safeFetchJson(API_V1.BUSINESSES.BASE, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const response: ApiResponse<BusinessResponse[]> = await request.json()
-  if (response.error) return response
+    if (response.error) return response
 
-  return { ...response, data: businessesAdapter(response.data) }
+    return { ...response, data: businessesAdapter(response.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 interface GetBusinessByIdArgs {
@@ -40,33 +54,39 @@ export async function getBusinessById(args: GetBusinessByIdArgs): Promise<ApiRes
 
   const accessToken = await getAccessToken()
 
-  const request = await fetch(API_V1.BUSINESSES.BUSINESS.BASE(businessId), {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const response: ApiResponse<BusinessResponse> = await safeFetchJson(API_V1.BUSINESSES.BUSINESS.BASE(businessId), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const response: ApiResponse<BusinessResponse> = await request.json()
-  if (response.error) return response
+    if (response.error) return response
 
-  return { ...response, data: businessAdapter(response.data) }
+    return { ...response, data: businessAdapter(response.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 export async function getBusinessesSummary(): Promise<ApiResponse<BusinessesSummary>> {
   const accessToken = await getAccessToken()
 
-  const request = await fetch(API_V1.BUSINESSES.SUMMARY, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const response: ApiResponse<BusinessesSummaryResponse> = await safeFetchJson(API_V1.BUSINESSES.SUMMARY, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const response: ApiResponse<BusinessesSummaryResponse> = await request.json()
-  if (response.error) return response
+    if (response.error) return response
 
-  return { ...response, data: businessesSummaryAdapter(response.data) }
+    return { ...response, data: businessesSummaryAdapter(response.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 export async function createBusiness(args: CreateBusinessSchema): Promise<ApiResponse<Business>> {

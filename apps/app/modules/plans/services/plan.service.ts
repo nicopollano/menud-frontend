@@ -8,22 +8,27 @@ export const planService = {
   async getSummary(): Promise<ProfileSummary> {
     const accessToken = await getAccessToken()
 
-    const request = await fetch(API_V1.PROFILE.SUMMARY, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
-
-    const response: ApiResponse<ProfileSummaryResponse> = await request.json()
-    if (response.error) {
-      throw new ApiError({
-        code: response.error.code,
-        message: response.error.message,
-        details: response.error.details
+    try {
+      const request = await fetch(API_V1.PROFILE.SUMMARY, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
       })
-    }
 
-    return response.data
+      const response: ApiResponse<ProfileSummaryResponse> = await request.json()
+      if (response.error) {
+        throw new ApiError({
+          code: response.error.code,
+          message: response.error.message,
+          details: response.error.details
+        })
+      }
+
+      return response.data
+    } catch (err) {
+      // Convert network/fetch errors into ApiError for uniform handling
+      throw new ApiError({ code: 'FETCH_FAILED', message: String(err) })
+    }
   }
 }

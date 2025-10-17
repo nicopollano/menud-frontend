@@ -1,6 +1,6 @@
 import { getAccessToken } from '@/modules/auth/services/auth.service'
-import type { BranchUser } from '@ristokit/shared/models/branch.model'
-import { sync } from 'motion/react'
+import type { Member } from '@ristokit/shared/models/member.model'
+// 'sync' from motion/react was unused; remove import
 import type { ApiError } from 'next/dist/server/api-utils'
 import useSWR, { mutate } from 'swr'
 import { getUsers } from '../services/users.service'
@@ -14,7 +14,7 @@ interface UserPermissionOptions {
 function useUserPermissions(options: UserPermissionOptions) {
   const { businessId, branchId, canRequest = true } = options
 
-  const response = useSWR<BranchUser[], ApiError>(
+  const response = useSWR<Member[], ApiError>(
     canRequest && businessId && branchId ? ['members', businessId, branchId] : null,
     async () => {
       const { data, error } = await getUsers({ businessId, branchId })

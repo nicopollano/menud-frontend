@@ -3,8 +3,8 @@ import { PlanCard } from '@/modules/plans/components/card/plan-card'
 import { PLAN_BASIC, PLAN_PREMIUM, PLAN_PRO } from '@ristokit/shared/models/plan.model'
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem } from '@ristokit/ui/components/carousel'
 import { cn } from '@ristokit/ui/lib/utils'
+import { motion } from 'framer-motion'
 import { CheckCircleIcon } from 'lucide-react'
-import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 
 function PlanCardCarousel() {

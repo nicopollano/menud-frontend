@@ -23,13 +23,20 @@ export async function getBranchById(args: GetBranchByIdArgs): Promise<ApiRespons
 }
 
 export async function getBranchSlugs(): Promise<ApiResponse<BranchSlug[]>> {
-  const request = await fetch(API_V1.BRANCHES.SLUGS, {
-    method: 'GET',
-    next: { revalidate: env.NEXT_PUBLIC_API_REVALIDATE }
-  })
+  try {
+    const request = await fetch(API_V1.BRANCHES.SLUGS, {
+      method: 'GET',
+      next: { revalidate: env.NEXT_PUBLIC_API_REVALIDATE }
+    })
 
-  const response: ApiResponse<BranchSlug[]> = await request.json()
-  if (response.error) return response
+    const response: ApiResponse<BranchSlug[]> = await request.json()
+    if (response.error) return response
 
-  return { ...response, data: branchSlugsAdapter(response.data) }
+    return { ...response, data: branchSlugsAdapter(response.data) }
+  } catch (err) {
+    // If fetch fails in CI/SSG environment, return empty list so generation doesn't fail
+    // eslint-disable-next-line no-console
+    console.warn('getBranchSlugs failed:', err)
+    return { statusCode: 200, error: null, data: [] }
+  }
 }

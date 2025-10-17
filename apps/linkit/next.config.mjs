@@ -9,7 +9,9 @@ const nextConfig = {
   transpilePackages: ['@ristokit/ui'],
   images: {
     unoptimized: true
-  }
+  },
+  // Build a standalone server bundle for container runtime
+  output: 'standalone'
 }
 
 export default nextConfig

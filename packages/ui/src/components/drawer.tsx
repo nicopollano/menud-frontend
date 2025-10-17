@@ -7,8 +7,16 @@ function Drawer({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>)
   return <DrawerPrimitive.Root repositionInputs={false} data-slot='drawer' {...props} />
 }
 
-function DrawerTrigger({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Trigger>) {
-  return <DrawerPrimitive.Trigger data-slot='drawer-trigger' {...props} />
+function DrawerTrigger(props: React.PropsWithChildren<React.ComponentProps<typeof DrawerPrimitive.Trigger>>) {
+  const { children, ...rest } = props
+  return (
+    <DrawerPrimitive.Trigger
+      data-slot='drawer-trigger'
+      {...(rest as React.ComponentProps<typeof DrawerPrimitive.Trigger>)}
+    >
+      {children}
+    </DrawerPrimitive.Trigger>
+  )
 }
 
 function DrawerPortal({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Portal>) {

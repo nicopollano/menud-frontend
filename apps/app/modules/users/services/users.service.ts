@@ -1,8 +1,8 @@
 import { API_V1 } from '@/lib/api/api.config'
-import type { ApiResponse } from '@/lib/api/api.model'
 import { getAccessToken } from '@/modules/auth/services/auth.service'
 import { buildQueryString } from '@ristokit/shared/helpers/general.helper'
-import type { BranchUser } from '@ristokit/shared/models/branch.model'
+import type { ApiResponse } from '@ristokit/shared/lib/api/api.model'
+import type { Member } from '@ristokit/shared/models/member.model'
 
 interface GetUsersArgs {
   businessId: string
@@ -10,28 +10,31 @@ interface GetUsersArgs {
 }
 
 interface BranchUserResponse {
-  members: BranchUser[]
+  members: Member[]
   summary: {
     totalMembers: number
   }
 }
 
-export async function getUsers(args: GetUsersArgs): Promise<ApiResponse<BranchUser[]>> {
+export async function getUsers(args: GetUsersArgs): Promise<ApiResponse<Member[]>> {
   const { businessId, branchId } = args
   const accessToken = await getAccessToken()
 
   const url = buildQueryString(API_V1.BUSINESSES.BRANCHES.MEMBERS.BASE(businessId, branchId), {})
+  try {
+    const request = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
 
-  const request = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+    const response: ApiResponse<BranchUserResponse> = await request.json()
 
-  const response: ApiResponse<BranchUserResponse> = await request.json()
+    if (response.error) return response
 
-  if (response.error) return response
-
-  return { ...response, data: response.data.members }
+    return { ...response, data: response.data.members }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }

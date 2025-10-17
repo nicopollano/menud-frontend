@@ -18,17 +18,23 @@ export async function getMenus(args: GetMenusArgs): Promise<ApiResponse<Menu[]>>
 
   const accessToken = await getAccessToken()
 
-  const request = await fetch(API_V1.BUSINESSES.BRANCHES.MENUS.BASE(businessId, branchId), {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const res: ApiResponse<MenuResponse[]> = await (async () => {
+      const r = await fetch(API_V1.BUSINESSES.BRANCHES.MENUS.BASE(businessId, branchId), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      return r.json()
+    })()
 
-  const response: ApiResponse<MenuResponse[]> = await request.json()
-  if (response.error) return response
+    if (res.error) return res
 
-  return { ...response, data: menusAdapter(response.data) }
+    return { ...res, data: menusAdapter(res.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 interface GetMenuByIdArgs extends GetMenusArgs {
@@ -40,17 +46,23 @@ export async function getMenuById(args: GetMenuByIdArgs): Promise<ApiResponse<Me
 
   const accessToken = await getAccessToken()
 
-  const request = await fetch(API_V1.BUSINESSES.BRANCHES.MENUS.MENU.BASE(businessId, branchId, menuId), {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const res = await (async () => {
+      const r = await fetch(API_V1.BUSINESSES.BRANCHES.MENUS.MENU.BASE(businessId, branchId, menuId), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      return r.json()
+    })()
 
-  const response: ApiResponse<MenuResponse> = await request.json()
-  if (response.error) return response
+    if (res.error) return res
 
-  return { ...response, data: menuAdapter(response.data) }
+    return { ...res, data: menuAdapter(res.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 interface GetMenusSummaryArgs {
@@ -63,17 +75,23 @@ export async function getMenusSummary(args: GetMenusSummaryArgs): Promise<ApiRes
 
   const accessToken = await getAccessToken()
 
-  const request = await fetch(API_V1.BUSINESSES.BRANCHES.MENUS.SUMMARY(businessId, branchId), {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+  try {
+    const res = await (async () => {
+      const r = await fetch(API_V1.BUSINESSES.BRANCHES.MENUS.SUMMARY(businessId, branchId), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      return r.json()
+    })()
 
-  const response: ApiResponse<MenusSummaryResponse> = await request.json()
-  if (response.error) return response
+    if (res.error) return res
 
-  return { ...response, data: menusSummaryAdapter(response.data) }
+    return { ...res, data: menusSummaryAdapter(res.data) }
+  } catch (err) {
+    return { statusCode: 503, error: { code: 'FETCH_FAILED', message: String(err) }, data: null }
+  }
 }
 
 export async function createMenu(args: CreateMenuSchema): Promise<ApiResponse<Menu>> {

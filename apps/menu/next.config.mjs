@@ -12,4 +12,7 @@ const nextConfig = {
   }
 }
 
+// produce standalone output to run with the Dockerfile runner
+nextConfig.output = 'standalone'
+
 export default nextConfig

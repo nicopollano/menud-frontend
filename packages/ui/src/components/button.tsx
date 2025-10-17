@@ -2,7 +2,7 @@
 import { Slot } from '@radix-ui/react-slot'
 import { cn } from '@ristokit/ui/lib/utils'
 import { type VariantProps, cva } from 'class-variance-authority'
-import { motion } from 'motion/react'
+import { motion } from 'framer-motion'
 import type * as React from 'react'
 
 const buttonVariants = cva(

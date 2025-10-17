@@ -1,5 +1,6 @@
 'use client'
-import { AnimatePresence, type Variants, motion } from 'motion/react'
+import { AnimatePresence, type HTMLMotionProps, type Variants, motion } from 'framer-motion'
+import type React from 'react'
 
 const overlayVariants: Variants = {
   default: {
@@ -26,16 +27,23 @@ interface OverlayMotionProps {
 function OverlayMotion({ visible }: OverlayMotionProps) {
   return (
     <AnimatePresence>
-      {visible && (
-        <motion.div
-          key='overlay-blur'
-          variants={overlayVariants}
-          initial='default'
-          animate='visible'
-          exit='hidden'
-          className='fixed inset-0 z-40 bg-gradient-to-t from-secondary/70 to-transparent'
-        />
-      )}
+      {visible &&
+        // Use a small typed wrapper around motion.div to satisfy TypeScript
+        (() => {
+          type Props = React.HTMLAttributes<HTMLDivElement> & HTMLMotionProps<'div'>
+          const MotionDiv = motion.div as unknown as React.FC<Props>
+
+          return (
+            <MotionDiv
+              key='overlay-blur'
+              variants={overlayVariants}
+              initial='default'
+              animate='visible'
+              exit='hidden'
+              className='fixed inset-0 z-40 bg-gradient-to-t from-secondary/70 to-transparent'
+            />
+          )
+        })()}
     </AnimatePresence>
   )
 }
