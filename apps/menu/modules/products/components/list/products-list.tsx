@@ -1,6 +1,6 @@
 import { PreviewProductCardSkeleton } from '@/modules/products/components/card/preview-product-card'
-import { ProductDetailDrawer } from '@/modules/products/components/drawer/product-detail-drawer'
 import type { Product } from '@ristokit/shared/models/product.model'
+import { cn } from '@ristokit/ui/lib/utils'
 import dynamic from 'next/dynamic'
 
 const LazyPreviewProductCard = dynamic(
@@ -19,14 +19,19 @@ interface ProductsListProps {
 
 function ProductsList({ products }: ProductsListProps) {
   return (
-    <ul className='grid gap-5 sm:grid-cols-2'>
-      {products.map((product) => (
+    <ul
+      className={cn(
+        'grid gap-4',
+        // Mobile: 1 columna (cards verticales)
+        'grid-cols-1',
+        // Desktop: 1 columna (cards horizontales tipo lista)
+        // Para pantallas muy grandes, máximo 2 columnas
+        'xl:grid-cols-1 2xl:grid-cols-1'
+      )}
+    >
+      {products.map((product, index) => (
         <li key={product.id}>
-          <ProductDetailDrawer product={product}>
-            <div className='cursor-pointer'>
-              <LazyPreviewProductCard product={product} />
-            </div>
-          </ProductDetailDrawer>
+          <LazyPreviewProductCard product={product} index={index} />
         </li>
       ))}
     </ul>

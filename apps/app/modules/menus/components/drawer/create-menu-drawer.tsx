@@ -16,6 +16,7 @@ import { AlertError } from '@ristokit/ui/components/alert'
 import { Button, UploaderButton } from '@ristokit/ui/components/button'
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerHandle,
@@ -38,6 +39,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from '@ristokit/ui/components/sonner'
 import { Textarea } from '@ristokit/ui/components/textarea'
 import { LineIcon } from '@ristokit/ui/icons/line.icon'
+import { ReadIcon } from '@ristokit/ui/icons/read.icon'
 import { LoaderIcon } from 'lucide-react'
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
@@ -97,13 +99,19 @@ function CreateMenuDrawer() {
       ])
 
       closeDrawer()
-    } catch (error) {
+    } catch (error: any) {
       console.log(error)
+      const isMaxMenusReached = error?.code === 'SUBSCRIPTION/MAXMENUSREACHED' || error?.message === 'Max menus reached'
+
       toast.custom(() => (
         <AlertError
-          title='¡Error al crear el menú!'
-          description={`Ocurrió un error al intentar crear el menú ${values.name}.`}
-          details={error instanceof Error ? [error.message] : undefined}
+          title={isMaxMenusReached ? '¡Límite de menús alcanzado!' : '¡Error al crear el menú!'}
+          description={
+            isMaxMenusReached
+              ? 'Has alcanzado el número máximo de menús permitidos por tu plan actual. Por favor, actualiza tu suscripción para crear más.'
+              : `Ocurrió un error al intentar crear el menú ${values.name}.`
+          }
+          details={isMaxMenusReached ? undefined : error instanceof Error ? [error.message] : undefined}
         />
       ))
     }
@@ -145,9 +153,17 @@ function CreateMenuDrawer() {
       }}
     >
       <DrawerTrigger asChild>
-        <Button variant='outline' size='small'>
-          Agregar menú
-        </Button>
+        <button
+          style={{ backgroundColor: 'white' }}
+          className='relative z-10 group flex items-center gap-3 rounded-full !bg-white p-1.5 pr-4 shadow-[0_4px_20px_rgb(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 hover:!bg-[#fa5252] hover:border-white transition-all duration-300 border border-neutral-100'
+        >
+          <div className='flex size-8 items-center justify-center rounded-full bg-primary-50 text-primary-600 group-hover:!bg-white group-hover:!text-[#fa5252] transition-all duration-300'>
+            <ReadIcon className='size-4' strokeWidth={2.5} />
+          </div>
+          <span className='text-sm font-semibold text-neutral-600 group-hover:text-white transition-colors duration-300'>
+            Agregar menú
+          </span>
+        </button>
       </DrawerTrigger>
       <DrawerContent>
         <Form {...form}>
@@ -167,6 +183,7 @@ function CreateMenuDrawer() {
                 name='businessId'
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Restaurante</FormLabel>
                     <Select
                       value={field.value}
                       defaultValue={field.value}
@@ -175,14 +192,11 @@ function CreateMenuDrawer() {
                         form.resetField('branchId')
                       }}
                     >
-                      <FormGroup>
-                        <FormControl>
-                          <SelectTrigger variant='field'>
-                            <SelectValue placeholder='' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <FormLabel variant='field'>Restaurante*</FormLabel>
-                      </FormGroup>
+                      <FormControl>
+                        <SelectTrigger className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'>
+                          <SelectValue placeholder='Seleccionar restaurante' />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
                         {isLoadingBusinesses && 'Cargando restaurantes...'}
                         {businesses?.map((business) => (
@@ -201,15 +215,13 @@ function CreateMenuDrawer() {
                 name='branchId'
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Sucursal</FormLabel>
                     <Select value={field.value} defaultValue={field.value} onValueChange={field.onChange}>
-                      <FormGroup>
-                        <FormControl>
-                          <SelectTrigger variant='field'>
-                            <SelectValue placeholder='' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <FormLabel variant='field'>Sucursal*</FormLabel>
-                      </FormGroup>
+                      <FormControl>
+                        <SelectTrigger className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'>
+                          <SelectValue placeholder='Seleccionar sucursal' />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
                         {isLoadingBranches && 'Cargando sucursales...'}
                         {!isLoadingBranches && !branches?.length && 'No hay sucursales disponibles'}
@@ -229,13 +241,14 @@ function CreateMenuDrawer() {
                 name='name'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Input placeholder='' variant='field' {...field} />
-                      </FormControl>
-                      <FormLabel variant='field'>Nombre*</FormLabel>
-                    </FormGroup>
-                    <FormDescription>Ejemplo: Desayunos, Cena, etc.</FormDescription>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Nombre</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Ej: Desayunos, Cena, etc.'
+                        {...field}
+                        className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -245,12 +258,15 @@ function CreateMenuDrawer() {
                 name='description'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Textarea placeholder='' {...field} value={field.value ?? ''} />
-                      </FormControl>
-                      <FormLabel variant='field'>Descripción</FormLabel>
-                    </FormGroup>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Descripción</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder='Breve descripción del menú...'
+                        {...field}
+                        value={field.value ?? ''}
+                        className='min-h-[100px] rounded-[24px] border-neutral-200 bg-neutral-50 px-4 py-3 hover:bg-neutral-100 focus:ring-primary-500/20 resize-none'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -271,7 +287,11 @@ function CreateMenuDrawer() {
                         {...field}
                       />
                     </FormControl>
-                    <UploaderButton onClick={() => imagesRef.current?.click()} placeholder='Subir logo' />
+                    <UploaderButton
+                      onClick={() => imagesRef.current?.click()}
+                      placeholder='Subir logo'
+                      className='rounded-[24px] border-2 border-dashed border-neutral-200 bg-neutral-50 hover:bg-neutral-100 hover:border-primary-400'
+                    />
                     {hasSelectedImages && (
                       <PreviewImagesList
                         multiple={false}
@@ -285,9 +305,25 @@ function CreateMenuDrawer() {
                 )}
               />
             </DrawerHeader>
-            <Button type='submit' size='medium' disabled={isSubmitting}>
-              {isSubmitting ? <LoaderIcon className='size-4 animate-spin' /> : 'Crear menú'}
-            </Button>
+            <div className='flex flex-col gap-3'>
+              <DrawerClose asChild>
+                <Button
+                  variant='ghost'
+                  size='md'
+                  className='w-full rounded-full text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
+                >
+                  Cancelar
+                </Button>
+              </DrawerClose>
+              <Button
+                type='submit'
+                size='md'
+                disabled={isSubmitting}
+                className='w-full rounded-full !bg-[#fa5252] hover:!bg-[#f03e3e] text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300'
+              >
+                {isSubmitting ? <LoaderIcon className='size-4 animate-spin' /> : 'Crear menú'}
+              </Button>
+            </div>
           </form>
         </Form>
       </DrawerContent>

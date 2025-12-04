@@ -19,6 +19,7 @@ import { MenuIcon } from '@ristokit/ui/icons/menu.icon'
 import { SignoutIcon } from '@ristokit/ui/icons/signout-icon'
 import { SupportIcon } from '@ristokit/ui/icons/support.icon'
 import { UserIcon } from '@ristokit/ui/icons/user-icon'
+import { cn } from '@ristokit/ui/lib/utils'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 
@@ -52,44 +53,65 @@ function BusinessNavigationMenuDrawer() {
               <DrawerTitle>Menú</DrawerTitle>
               <LineIcon className='h-px' />
             </div>
-            <div className='grid grid-cols-2 gap-x-4 gap-y-[1.875rem]'>
+            <div className='flex flex-col gap-y-2'>
               <Link
                 href={ROUTES.BUSINESSES}
                 onClick={toggleDrawer}
-                className={buttonVariants({ variant: 'navigation-menu', size: 'styless' })}
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'lg' }),
+                  'w-full justify-start gap-3 px-4 text-base font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl'
+                )}
               >
-                <BranchIcon />
+                <BranchIcon className='size-5' />
                 Restaurantes
               </Link>
               <Link
                 href={ROUTES.LINKIT}
                 onClick={toggleDrawer}
-                className={buttonVariants({ variant: 'navigation-menu', size: 'styless' })}
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'lg' }),
+                  'w-full justify-start gap-3 px-4 text-base font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl'
+                )}
               >
-                <LinkitIcon />
+                <LinkitIcon className='size-5' />
                 Linkit
               </Link>
               <Link
                 href='mailto:hello@ristokit.com'
                 target='_blank'
                 rel='noopener noreferrer'
-                className={buttonVariants({ variant: 'navigation-menu', size: 'styless' })}
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'lg' }),
+                  'w-full justify-start gap-3 px-4 text-base font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl'
+                )}
               >
-                <SupportIcon />
+                <SupportIcon className='size-5' />
                 Soporte
               </Link>
               <Link
                 href={ROUTES.PROFILE}
                 onClick={toggleDrawer}
-                className={buttonVariants({ variant: 'navigation-menu', size: 'styless' })}
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'lg' }),
+                  'w-full justify-start gap-3 px-4 text-base font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl'
+                )}
               >
-                <UserIcon />
+                <UserIcon className='size-5' />
                 Perfil
               </Link>
             </div>
-            <Button onClick={handleSignOut} variant='link' size='styless'>
-              <SignoutIcon /> Cerrar sesión
-            </Button>
+
+            <div className='pt-4 mt-auto'>
+              <Button
+                onClick={handleSignOut}
+                variant='ghost'
+                size='lg'
+                className='w-full justify-start gap-3 px-4 text-base font-medium text-error-600 hover:text-error-700 hover:bg-error-50 rounded-xl'
+              >
+                <SignoutIcon className='size-5' />
+                Cerrar sesión
+              </Button>
+            </div>
           </DrawerHeader>
         </div>
       </DrawerContent>

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
+    "dev": "next dev --turbopack -p $PORT",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "prepare": "lefthook install",

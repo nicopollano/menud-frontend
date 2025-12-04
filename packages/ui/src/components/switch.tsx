@@ -5,33 +5,57 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 export const switchVariants = cva(
-  'data-[state=checked]:bg-primary data-[state=unchecked]:bg-gray-dark peer inline-flex h-[1.875rem] w-[3.9375rem] shrink-0 items-center rounded-full outline-none transition-all disabled:cursor-not-allowed disabled:opacity-50',
+  [
+    // Base styles - 2025 modern
+    'peer inline-flex shrink-0 items-center',
+    'rounded-full outline-none',
+    'transition-all duration-300 ease-out',
+    'disabled:cursor-not-allowed disabled:opacity-60',
+    // Focus state
+    'focus-visible:ring-4 focus-visible:ring-offset-2',
+    // Unchecked state
+    'data-[state=unchecked]:bg-neutral-300',
+    'data-[state=unchecked]:hover:bg-neutral-400',
+    // Checked state
+    'data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-primary-600 data-[state=checked]:to-primary-500',
+    'data-[state=checked]:shadow-soft-sm',
+    'data-[state=checked]:hover:from-primary-700 data-[state=checked]:hover:to-primary-600',
+    // Focus variations
+    'focus-visible:data-[state=checked]:ring-primary-500/30',
+    'focus-visible:data-[state=unchecked]:ring-neutral-400/30'
+  ],
   {
     variants: {
       size: {
-        normal: 'h-[1.875rem] w-[3.9375rem]',
-        small: 'h-[1.3125rem] w-[2.75rem]'
+        sm: 'h-5 w-9',
+        md: 'h-6 w-11',
+        lg: 'h-7 w-[3.25rem]',
+        // Legacy support
+        small: 'h-5 w-9',
+        normal: 'h-6 w-11'
       }
     },
     defaultVariants: {
-      size: 'normal'
+      size: 'md'
     }
   }
 )
 
 export const switchThumbVariants = cva(
-  'bg-background pointer-events-none block rounded-full ring-0 transition-transform',
+  ['pointer-events-none block rounded-full', 'bg-white shadow-soft-md', 'transition-transform duration-300 ease-out'],
   {
     variants: {
       size: {
-        normal:
-          'size-[1.625rem] data-[state=checked]:translate-x-[calc(150%-0.25rem)] data-[state=unchecked]:translate-x-0.5',
-        small:
-          'size-[0.9375rem] data-[state=checked]:translate-x-[calc(200%-0.25rem)] data-[state=unchecked]:translate-x-[0.1875rem]'
+        sm: 'size-4 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0.5',
+        md: 'size-5 data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0.5',
+        lg: 'size-6 data-[state=checked]:translate-x-6 data-[state=unchecked]:translate-x-0.5',
+        // Legacy support
+        small: 'size-4 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0.5',
+        normal: 'size-5 data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0.5'
       }
     },
     defaultVariants: {
-      size: 'normal'
+      size: 'md'
     }
   }
 )

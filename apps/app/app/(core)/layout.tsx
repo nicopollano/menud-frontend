@@ -12,7 +12,7 @@ async function CoreLayout({ children }: CoreLayoutProps) {
   if (!session) return redirect(ROUTES.AUTH_SIGN_IN)
 
   return (
-    <main className='flex flex-col gap-y-[1.875rem] px-4 py-[1.875rem]'>
+    <main className='flex min-h-dvh flex-col gap-y-8 bg-neutral-50 px-4 py-8 md:px-6'>
       <Header />
       {children}
     </main>

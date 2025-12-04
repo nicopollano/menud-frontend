@@ -20,6 +20,7 @@ import { AlertError } from '@ristokit/ui/components/alert'
 import { Button, UploaderButton } from '@ristokit/ui/components/button'
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerFooter,
   DrawerHandle,
@@ -42,7 +43,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from '@ristokit/ui/components/sonner'
 import { Textarea } from '@ristokit/ui/components/textarea'
 import { LineIcon } from '@ristokit/ui/icons/line.icon'
-import { LoaderIcon } from 'lucide-react'
+import { LoaderIcon, UtensilsIcon } from 'lucide-react'
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -209,7 +210,17 @@ function CreateProductDrawer() {
       }}
     >
       <DrawerTrigger asChild>
-        <Button size='small'>Agregar producto</Button>
+        <button
+          style={{ backgroundColor: 'white' }}
+          className='relative z-10 group flex items-center gap-3 rounded-full !bg-white p-1.5 pr-4 shadow-[0_4px_20px_rgb(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 hover:!bg-[#fa5252] hover:border-white transition-all duration-300 border border-neutral-100'
+        >
+          <div className='flex size-8 items-center justify-center rounded-full bg-primary-50 text-primary-600 group-hover:!bg-white group-hover:!text-[#fa5252] transition-all duration-300'>
+            <UtensilsIcon className='size-4' strokeWidth={2.5} />
+          </div>
+          <span className='text-sm font-semibold text-neutral-600 group-hover:text-white transition-colors duration-300'>
+            Agregar producto
+          </span>
+        </button>
       </DrawerTrigger>
       <DrawerContent>
         <Form {...form}>
@@ -228,6 +239,7 @@ function CreateProductDrawer() {
                 name='categoryId'
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Categoría</FormLabel>
                     <Select
                       value={field.value}
                       defaultValue={field.value}
@@ -236,14 +248,11 @@ function CreateProductDrawer() {
                         form.resetField('subcategoryId')
                       }}
                     >
-                      <FormGroup>
-                        <FormControl>
-                          <SelectTrigger variant='field'>
-                            <SelectValue placeholder='' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <FormLabel variant='field'>Categoría*</FormLabel>
-                      </FormGroup>
+                      <FormControl>
+                        <SelectTrigger className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'>
+                          <SelectValue placeholder='Seleccionar categoría' />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
                         {isLoadingCategories && 'Cargando categorías...'}
                         {!isLoadingCategories && !categories?.length && 'Sin categorías'}
@@ -263,15 +272,18 @@ function CreateProductDrawer() {
                 name='subcategoryId'
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>
+                      Subcategoría (Opcional)
+                    </FormLabel>
                     <Select value={field.value} defaultValue={field.value} onValueChange={field.onChange}>
-                      <FormGroup>
-                        <FormControl>
-                          <SelectTrigger variant='field' disabled={!hasSubcategories}>
-                            <SelectValue placeholder='' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <FormLabel variant='field'>Subcategoría</FormLabel>
-                      </FormGroup>
+                      <FormControl>
+                        <SelectTrigger
+                          className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'
+                          disabled={!hasSubcategories}
+                        >
+                          <SelectValue placeholder='Seleccionar subcategoría' />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
                         {isLoadingSubcategories && 'Cargando subcategorías...'}
                         {!isLoadingSubcategories && !subcategories?.length && 'Sin subcategorías'}
@@ -291,13 +303,15 @@ function CreateProductDrawer() {
                 name='name'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Input placeholder='' variant='field' {...field} />
-                      </FormControl>
-                      <FormLabel variant='field'>Nombre*</FormLabel>
-                    </FormGroup>
-                    <FormDescription>Ejemplo: Bebidas, Entrada, etc.</FormDescription>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Nombre</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Ej: Hamburguesa Doble'
+                        variant='field'
+                        {...field}
+                        className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -307,12 +321,15 @@ function CreateProductDrawer() {
                 name='description'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Textarea placeholder='' {...field} value={field.value ?? ''} />
-                      </FormControl>
-                      <FormLabel variant='field'>Descripción</FormLabel>
-                    </FormGroup>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Descripción</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder='Breve descripción del producto...'
+                        {...field}
+                        value={field.value ?? ''}
+                        className='min-h-[100px] rounded-[24px] border-neutral-200 bg-neutral-50 px-4 py-3 hover:bg-neutral-100 focus:ring-primary-500/20 resize-none'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -334,7 +351,10 @@ function CreateProductDrawer() {
                         {...field}
                       />
                     </FormControl>
-                    <UploaderButton onClick={() => imagesRef.current?.click()} />
+                    <UploaderButton
+                      onClick={() => imagesRef.current?.click()}
+                      className='rounded-[24px] border-2 border-dashed border-neutral-200 bg-neutral-50 hover:bg-neutral-100 hover:border-primary-400'
+                    />
                     {hasSelectedImages && (
                       <PreviewImagesList
                         images={selectedImages}
@@ -352,17 +372,16 @@ function CreateProductDrawer() {
                   name='price'
                   render={({ field }) => (
                     <FormItem>
-                      <FormGroup>
-                        <FormControl>
-                          <Input
-                            placeholder=''
-                            variant='field'
-                            {...field}
-                            onBlur={(ev) => handleFormatPrice(ev, field.onChange)}
-                          />
-                        </FormControl>
-                        <FormLabel variant='field'>Precio*</FormLabel>
-                      </FormGroup>
+                      <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Precio</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='$ 0,00'
+                          variant='field'
+                          {...field}
+                          onBlur={(ev) => handleFormatPrice(ev, field.onChange)}
+                          className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -372,18 +391,19 @@ function CreateProductDrawer() {
                   name='discountedPrice'
                   render={({ field }) => (
                     <FormItem>
-                      <FormGroup>
-                        <FormControl>
-                          <Input
-                            placeholder=''
-                            variant='field'
-                            {...field}
-                            onBlur={(ev) => handleFormatPrice(ev, field.onChange)}
-                            value={field.value ?? ''}
-                          />
-                        </FormControl>
-                        <FormLabel variant='field'>Precio dcto</FormLabel>
-                      </FormGroup>
+                      <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>
+                        Precio con descuento
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='$ 0,00'
+                          variant='field'
+                          {...field}
+                          onBlur={(ev) => handleFormatPrice(ev, field.onChange)}
+                          value={field.value ?? ''}
+                          className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -391,20 +411,35 @@ function CreateProductDrawer() {
               </div>
               {discountedPrice && <PreviewDiscountProductCard product={previewProduct} />}
             </DrawerHeader>
-            <DrawerFooter>
-              <Button onClick={handleCreateNewProduct} type='submit' size='medium' disabled={isSubmitting}>
+            <DrawerFooter className='flex flex-col gap-3'>
+              <Button
+                onClick={handleCreateNewProduct}
+                type='submit'
+                size='md'
+                disabled={isSubmitting}
+                className='w-full rounded-full !bg-[#fa5252] hover:!bg-[#f03e3e] text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300'
+              >
                 {isSubmitting ? <LoaderIcon className='size-4 animate-spin' /> : 'Crear producto'}
               </Button>
               <Button
                 onClick={handleAddProductAndCreateNewProduct}
-                className='text-button-mobile-normal text-text disabled:bg-transparent disabled:text-text'
-                variant='styless'
-                size='styless'
+                className='w-full rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
+                variant='ghost'
+                size='md'
                 type='button'
                 disabled={isSubmitting}
               >
                 Añadir producto y crear otro
               </Button>
+              <DrawerClose asChild>
+                <Button
+                  variant='ghost'
+                  size='md'
+                  className='w-full rounded-full text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
+                >
+                  Cancelar
+                </Button>
+              </DrawerClose>
             </DrawerFooter>
           </form>
         </Form>

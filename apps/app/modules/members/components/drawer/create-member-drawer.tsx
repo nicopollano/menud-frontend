@@ -32,7 +32,7 @@ import {
 import { Input } from '@ristokit/ui/components/input'
 import { toast } from '@ristokit/ui/components/sonner'
 import { LineIcon } from '@ristokit/ui/icons/line.icon'
-import { LoaderIcon, ShuffleIcon } from 'lucide-react'
+import { LoaderIcon, ShuffleIcon, UserPlusIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 
 function CreateMemberDrawer() {
@@ -97,7 +97,17 @@ function CreateMemberDrawer() {
       }}
     >
       <DrawerTrigger asChild>
-        <Button size='small'>Agregar usuario</Button>
+        <button
+          style={{ backgroundColor: 'white' }}
+          className='relative z-10 group flex items-center gap-3 rounded-full !bg-white p-1.5 pr-4 shadow-[0_4px_20px_rgb(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 hover:!bg-[#fa5252] hover:border-white transition-all duration-300 border border-neutral-100'
+        >
+          <div className='flex size-8 items-center justify-center rounded-full bg-primary-50 text-primary-600 group-hover:!bg-white group-hover:!text-[#fa5252] transition-all duration-300'>
+            <UserPlusIcon className='size-4' strokeWidth={2.5} />
+          </div>
+          <span className='text-sm font-semibold text-neutral-600 group-hover:text-white transition-colors duration-300'>
+            Agregar usuario
+          </span>
+        </button>
       </DrawerTrigger>
       <DrawerContent>
         <Form {...form}>

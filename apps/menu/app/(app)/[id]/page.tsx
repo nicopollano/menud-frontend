@@ -4,7 +4,7 @@ import { ProductsSection } from '@/modules/products/components/section/products-
 
 function SlugPage() {
   return (
-    <main className='flex flex-col'>
+    <main id='main-content' className='flex flex-col' tabIndex={-1}>
       <ProductFilterBar />
       <ProductsCategoriesCarousel />
       <ProductsSection />

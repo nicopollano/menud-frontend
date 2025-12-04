@@ -1,6 +1,7 @@
 'use client'
 import { BranchProvider } from '@/modules/branches/providers/branch.provider'
 import { FavoriteProductsProvider } from '@/modules/products/providers/favorite-products.provider'
+import { ToastProvider } from '@/modules/shared/providers/toast.provider'
 import type { BranchById } from '@ristokit/shared/models/branch.model'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
@@ -18,9 +19,11 @@ function SlugProvider({ children, branch }: SlugProviderProps) {
       disableTransitionOnChange
       enableColorScheme={false}
     >
-      <BranchProvider branch={branch}>
-        <FavoriteProductsProvider branchId={branch.slug}>{children}</FavoriteProductsProvider>
-      </BranchProvider>
+      <ToastProvider>
+        <BranchProvider branch={branch}>
+          <FavoriteProductsProvider branchId={branch.slug}>{children}</FavoriteProductsProvider>
+        </BranchProvider>
+      </ToastProvider>
     </NextThemesProvider>
   )
 }

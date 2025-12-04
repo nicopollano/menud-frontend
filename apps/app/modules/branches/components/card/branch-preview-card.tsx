@@ -48,7 +48,7 @@ function BranchPreviewCard() {
         <div className='relative 360:col-span-1 col-span-full size-[7.625rem]'>
           <QRCode
             id={data.id}
-            fgColor='#ff852d'
+            fgColor='#C82020'
             style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
             value={buildMenuPublicUrl(data.id)}
           />

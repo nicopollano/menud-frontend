@@ -1,6 +1,7 @@
 'use client'
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 import { cn } from '@ristokit/ui/lib/utils'
+import { type VariantProps, cva } from 'class-variance-authority'
 import { CircleIcon } from 'lucide-react'
 import type * as React from 'react'
 
@@ -8,21 +9,63 @@ function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGr
   return <RadioGroupPrimitive.Root data-slot='radio-group' className={cn('grid gap-3', className)} {...props} />
 }
 
-function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {
+export const radioGroupItemVariants = cva(
+  [
+    // Base styles - 2025 modern
+    'aspect-square shrink-0 rounded-full',
+    'border-2 bg-background outline-none',
+    'transition-all duration-300 ease-out',
+    'disabled:cursor-not-allowed disabled:opacity-60',
+    // Focus state
+    'focus-visible:ring-4 focus-visible:ring-offset-2 focus-visible:ring-primary-500/30',
+    // Unchecked state
+    'border-neutral-300',
+    // Checked state
+    'data-[state=checked]:border-primary-500 data-[state=checked]:shadow-soft-sm',
+    // Invalid state
+    'aria-invalid:border-error-500 aria-invalid:ring-error-500/20',
+    // Hover state
+    'hover:border-primary-400 hover:shadow-soft-sm'
+  ],
+  {
+    variants: {
+      size: {
+        sm: 'size-4',
+        md: 'size-5',
+        lg: 'size-6'
+      }
+    },
+    defaultVariants: {
+      size: 'md'
+    }
+  }
+)
+
+export interface RadioGroupItemProps
+  extends React.ComponentProps<typeof RadioGroupPrimitive.Item>,
+    VariantProps<typeof radioGroupItemVariants> {}
+
+function RadioGroupItem({ className, size, ...props }: RadioGroupItemProps) {
+  const indicatorSize = size === 'sm' ? 'size-2' : size === 'lg' ? 'size-3' : 'size-2.5'
+
   return (
     <RadioGroupPrimitive.Item
       data-slot='radio-group-item'
-      className={cn(
-        'aspect-square size-4 shrink-0 rounded-full border border-neutral-200 text-neutral-900 shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-neutral-950 focus-visible:ring-[0.1875rem] focus-visible:ring-neutral-950/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-500 aria-invalid:ring-red-500/20 dark:border-neutral-800 dark:bg-neutral-200/30 dark:dark:bg-neutral-800/30 dark:text-neutral-50 dark:aria-invalid:border-red-900 dark:aria-invalid:ring-red-500/40 dark:aria-invalid:ring-red-900/20 dark:dark:aria-invalid:ring-red-900/40 dark:focus-visible:border-neutral-300 dark:focus-visible:ring-neutral-300/50',
-        className
-      )}
+      className={cn(radioGroupItemVariants({ size, className }))}
       {...props}
     >
       <RadioGroupPrimitive.Indicator
         data-slot='radio-group-indicator'
         className='relative flex items-center justify-center'
       >
-        <CircleIcon className='-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 size-2 fill-primary' />
+        <CircleIcon
+          className={cn(
+            '-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2',
+            'fill-primary-500 transition-transform duration-200',
+            'data-[state=checked]:scale-100 scale-0',
+            indicatorSize
+          )}
+        />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )

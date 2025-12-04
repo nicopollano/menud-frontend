@@ -1,5 +1,5 @@
 import { cn } from '@ristokit/ui/lib/utils'
-import { Baloo_Tammudu_2, Lato, Maven_Pro, Niconne, Pompiere, Poppins, Roboto, Salsa } from 'next/font/google'
+import { Baloo_Tammudu_2, Inter, Lato, Maven_Pro, Niconne, Pompiere, Poppins, Roboto, Salsa } from 'next/font/google'
 
 export const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -57,6 +57,12 @@ export const balooTammudu2 = Baloo_Tammudu_2({
   variable: '--font-baloo-tammudu-2'
 })
 
+export const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter'
+})
+
 export const variableFonts = cn(
   poppins.variable,
   roboto.variable,
@@ -65,5 +71,6 @@ export const variableFonts = cn(
   pompiere.variable,
   salsa.variable,
   niconne.variable,
-  balooTammudu2.variable
+  balooTammudu2.variable,
+  inter.variable
 )

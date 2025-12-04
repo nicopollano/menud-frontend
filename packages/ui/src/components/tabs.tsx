@@ -4,7 +4,7 @@ import { cn } from '@ristokit/ui/lib/utils'
 import type * as React from 'react'
 
 function Tabs({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Root>) {
-  return <TabsPrimitive.Root data-slot='tabs' className={cn('flex flex-col gap-2', className)} {...props} />
+  return <TabsPrimitive.Root data-slot='tabs' className={cn('flex flex-col gap-3 md:gap-4', className)} {...props} />
 }
 
 function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
@@ -12,7 +12,9 @@ function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimi
     <TabsPrimitive.List
       data-slot='tabs-list'
       className={cn(
-        'inline-flex h-9 w-fit items-center justify-center rounded-lg bg-neutral-100 p-[0.1875rem] text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400',
+        'inline-flex h-11 md:h-12 w-fit items-center justify-center gap-1',
+        'rounded-xl bg-neutral-100 p-1.5',
+        'border border-neutral-200',
         className
       )}
       {...props}
@@ -25,7 +27,24 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
     <TabsPrimitive.Trigger
       data-slot='tabs-trigger'
       className={cn(
-        'inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-neutral-200 border-transparent px-2 py-1 font-medium text-neutral-950 text-sm transition-[color,box-shadow] focus-visible:border-neutral-950 focus-visible:outline-1 focus-visible:outline-ring focus-visible:ring-[0.1875rem] focus-visible:ring-neutral-950/50 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow-sm dark:border-neutral-800 dark:dark:text-neutral-400 dark:text-neutral-50 dark:text-neutral-500 dark:dark:data-[state=active]:border-neutral-800 dark:data-[state=active]:border-neutral-200 dark:dark:data-[state=active]:bg-neutral-800/30 dark:data-[state=active]:bg-neutral-200/30 dark:data-[state=active]:bg-neutral-950 dark:dark:data-[state=active]:text-neutral-50 dark:data-[state=active]:text-neutral-950 dark:focus-visible:border-neutral-300 dark:focus-visible:ring-neutral-300/50 [&_svg:not([class*="size-"])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+        // Base styles - 2025 modern
+        'inline-flex flex-1 items-center justify-center gap-2',
+        'whitespace-nowrap rounded-lg',
+        'px-4 py-2 md:px-5 md:py-2.5',
+        'text-sm md:text-base font-medium',
+        'text-neutral-600 transition-all duration-200',
+        // Focus state
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+        // Disabled state
+        'disabled:pointer-events-none disabled:opacity-60',
+        // Inactive state
+        'hover:text-neutral-900 hover:bg-neutral-50',
+        // Active state
+        'data-[state=active]:bg-background data-[state=active]:text-primary-600',
+        'data-[state=active]:shadow-soft-sm',
+        'data-[state=active]:border data-[state=active]:border-primary-200',
+        // Icons
+        '[&_svg]:size-4 [&_svg]:md:size-5 [&_svg]:pointer-events-none [&_svg]:shrink-0',
         className
       )}
       {...props}
@@ -34,7 +53,17 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
 }
 
 function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) {
-  return <TabsPrimitive.Content data-slot='tabs-content' className={cn('flex-1 outline-none', className)} {...props} />
+  return (
+    <TabsPrimitive.Content
+      data-slot='tabs-content'
+      className={cn(
+        'flex-1 outline-none',
+        'focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:rounded-lg',
+        className
+      )}
+      {...props}
+    />
+  )
 }
 
 export { Tabs, TabsContent, TabsList, TabsTrigger }

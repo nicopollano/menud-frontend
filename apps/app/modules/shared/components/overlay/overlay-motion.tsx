@@ -40,7 +40,7 @@ function OverlayMotion({ visible }: OverlayMotionProps) {
               initial='default'
               animate='visible'
               exit='hidden'
-              className='fixed inset-0 z-40 bg-gradient-to-t from-secondary/70 to-transparent'
+              className='fixed inset-0 z-[20] bg-gradient-to-t from-secondary/70 to-transparent'
             />
           )
         })()}

@@ -33,7 +33,12 @@ function BreadcrumbLink({
   return (
     <Comp
       data-slot='breadcrumb-link'
-      className={cn('transition-colors hover:text-neutral-950', className)}
+      className={cn(
+        'text-sm md:text-base font-medium text-neutral-600',
+        'transition-all duration-200',
+        'hover:text-primary-600 hover:underline underline-offset-4',
+        className
+      )}
       {...props}
     />
   )
@@ -45,7 +50,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
       data-slot='breadcrumb-page'
       aria-disabled='true'
       aria-current='page'
-      className={cn('text-body-mobile-3 text-gray-dark', className)}
+      className={cn('text-sm md:text-base font-semibold text-text', className)}
       {...props}
     />
   )
@@ -57,7 +62,11 @@ function BreadcrumbSeparator({ children, className, ...props }: React.ComponentP
       data-slot='breadcrumb-separator'
       role='presentation'
       aria-hidden='true'
-      className={cn('[&>svg]:-rotate-90 [&>svg]:size-5 [&>svg]:stroke-gray-dark', className)}
+      className={cn(
+        'text-[#525252]', // Force neutral-600 hex
+        '[&>svg]:-rotate-90 [&>svg]:size-4 [&>svg]:md:size-5 [&>svg]:stroke-current',
+        className
+      )}
       {...props}
     >
       {children ?? <ArrowDownIcon />}

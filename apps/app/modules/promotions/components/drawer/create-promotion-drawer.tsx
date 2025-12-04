@@ -26,6 +26,7 @@ import { Calendar } from '@ristokit/ui/components/calendar'
 import { Checkbox } from '@ristokit/ui/components/checkbox'
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerHandle,
@@ -51,7 +52,7 @@ import { Textarea } from '@ristokit/ui/components/textarea'
 import { ArrowDownIcon } from '@ristokit/ui/icons/arrow-down.icon'
 import { LineIcon } from '@ristokit/ui/icons/line.icon'
 import { cn } from '@ristokit/ui/lib/utils'
-import { LoaderIcon } from 'lucide-react'
+import { LoaderIcon, PercentIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
@@ -179,9 +180,17 @@ function CreatePromotionDrawer() {
       }}
     >
       <DrawerTrigger asChild>
-        <Button variant='outline' size='small'>
-          Agregar promoción
-        </Button>
+        <button
+          style={{ backgroundColor: 'white' }}
+          className='relative z-10 group flex items-center gap-3 rounded-full !bg-white p-1.5 pr-4 shadow-[0_4px_20px_rgb(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 hover:!bg-[#fa5252] hover:border-white transition-all duration-300 border border-neutral-100'
+        >
+          <div className='flex size-8 items-center justify-center rounded-full bg-primary-50 text-primary-600 group-hover:!bg-white group-hover:!text-[#fa5252] transition-all duration-300'>
+            <PercentIcon className='size-4' strokeWidth={2.5} />
+          </div>
+          <span className='text-sm font-semibold text-neutral-600 group-hover:text-white transition-colors duration-300'>
+            Agregar promoción
+          </span>
+        </button>
       </DrawerTrigger>
       <DrawerContent>
         <Form {...form}>
@@ -203,13 +212,15 @@ function CreatePromotionDrawer() {
                 name='title'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Input placeholder='' variant='field' {...field} />
-                      </FormControl>
-                      <FormLabel variant='field'>Título*</FormLabel>
-                    </FormGroup>
-                    <FormDescription>Ejemplo: ¡Solo por hoy! Hasta 35% de descuento.</FormDescription>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Título</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Ej: ¡Solo por hoy! Hasta 35% de descuento.'
+                        variant='field'
+                        {...field}
+                        className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -219,15 +230,13 @@ function CreatePromotionDrawer() {
                 name='productIds'
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Elegir productos</FormLabel>
                     <Select value={field.value.length ? 'placeholder' : undefined}>
-                      <FormGroup>
-                        <FormControl>
-                          <SelectTrigger variant='field'>
-                            <SelectValue placeholder='' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <FormLabel variant='field'>Elegir productos*</FormLabel>
-                      </FormGroup>
+                      <FormControl>
+                        <SelectTrigger className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'>
+                          <SelectValue placeholder='Seleccionar productos' />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent className='relative [&>div]:gap-y-5'>
                         {isLoadingProducts && 'Cargando productos...'}
                         {!isLoadingProducts && !products?.length && 'Sin productos disponibles'}
@@ -285,30 +294,22 @@ function CreatePromotionDrawer() {
                   name='startsAt'
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Desde</FormLabel>
                       <Popover>
-                        <FormGroup>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                className={cn(
-                                  'peer group grid h-14 grid-cols-[1fr_auto] items-center rounded-sm border border-transparent bg-gray-light px-5 text-body-mobile-2 text-transparent transition-none aria-[invalid=true]:border-error',
-                                  {
-                                    'text-text': field.value
-                                  }
-                                )}
-                                variant='styless'
-                                size='styless'
-                                data-placeholder={field.value ? undefined : ''}
-                              >
-                                <span className={cn('truncate pt-[1.625rem] pb-2.5 text-left')}>
-                                  {field.value ? formatDateStringToDDMMYYYY(field.value) : 'Desde*'}
-                                </span>
-                                <ArrowDownIcon className='size-6 shrink-0 stroke-text transition-transform duration-300 group-data-[state=open]:rotate-180' />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <FormLabel variant='field'>Desde*</FormLabel>
-                        </FormGroup>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              className={cn(
+                                'h-12 w-full justify-between rounded-full border border-neutral-200 bg-neutral-50 px-4 text-left font-normal hover:bg-neutral-100 focus:ring-primary-500/20',
+                                !field.value && 'text-neutral-500'
+                              )}
+                              variant='ghost'
+                            >
+                              {field.value ? formatDateStringToDDMMYYYY(field.value) : 'Seleccionar fecha'}
+                              <ArrowDownIcon className='size-4 opacity-50' />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
                         <PopoverContent align='start'>
                           <Calendar
                             mode='single'
@@ -332,30 +333,22 @@ function CreatePromotionDrawer() {
                   name='endsAt'
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Hasta</FormLabel>
                       <Popover>
-                        <FormGroup>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                className={cn(
-                                  'peer group grid h-14 grid-cols-[1fr_auto] items-center rounded-sm border border-transparent bg-gray-light px-5 text-body-mobile-2 text-transparent transition-none aria-[invalid=true]:border-error',
-                                  {
-                                    'text-text': field.value
-                                  }
-                                )}
-                                variant='styless'
-                                size='styless'
-                                data-placeholder={field.value ? undefined : ''}
-                              >
-                                <span className={cn('truncate pt-[1.625rem] pb-2.5 text-left')}>
-                                  {field.value ? formatDateStringToDDMMYYYY(field.value) : 'Hasta*'}
-                                </span>
-                                <ArrowDownIcon className='size-6 shrink-0 stroke-text transition-transform duration-300 group-data-[state=open]:rotate-180' />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <FormLabel variant='field'>Hasta*</FormLabel>
-                        </FormGroup>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              className={cn(
+                                'h-12 w-full justify-between rounded-full border border-neutral-200 bg-neutral-50 px-4 text-left font-normal hover:bg-neutral-100 focus:ring-primary-500/20',
+                                !field.value && 'text-neutral-500'
+                              )}
+                              variant='ghost'
+                            >
+                              {field.value ? formatDateStringToDDMMYYYY(field.value) : 'Seleccionar fecha'}
+                              <ArrowDownIcon className='size-4 opacity-50' />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
                         <PopoverContent align='start'>
                           <Calendar
                             mode='single'
@@ -382,6 +375,7 @@ function CreatePromotionDrawer() {
                   name='startTime'
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Desde</FormLabel>
                       <Select
                         value={field.value}
                         defaultValue={field.value}
@@ -390,14 +384,11 @@ function CreatePromotionDrawer() {
                           form.setValue('days', [])
                         }}
                       >
-                        <FormGroup>
-                          <FormControl>
-                            <SelectTrigger variant='field'>
-                              <SelectValue placeholder='' />
-                            </SelectTrigger>
-                          </FormControl>
-                          <FormLabel variant='field'>Desde*</FormLabel>
-                        </FormGroup>
+                        <FormControl>
+                          <SelectTrigger className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'>
+                            <SelectValue placeholder='00:00' />
+                          </SelectTrigger>
+                        </FormControl>
                         <SelectContent>
                           {PROMOTION_HOURS.map((hour) => (
                             <SelectItem key={hour} value={hour}>
@@ -415,6 +406,7 @@ function CreatePromotionDrawer() {
                   name='endTime'
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Hasta</FormLabel>
                       <Select
                         value={field.value}
                         defaultValue={field.value}
@@ -423,14 +415,11 @@ function CreatePromotionDrawer() {
                           form.setValue('days', [])
                         }}
                       >
-                        <FormGroup>
-                          <FormControl>
-                            <SelectTrigger variant='field'>
-                              <SelectValue placeholder='' />
-                            </SelectTrigger>
-                          </FormControl>
-                          <FormLabel variant='field'>Hasta*</FormLabel>
-                        </FormGroup>
+                        <FormControl>
+                          <SelectTrigger className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'>
+                            <SelectValue placeholder='00:00' />
+                          </SelectTrigger>
+                        </FormControl>
                         <SelectContent>
                           {PROMOTION_HOURS.map((hour) => (
                             <SelectItem key={hour} value={hour}>
@@ -449,15 +438,13 @@ function CreatePromotionDrawer() {
                 name='days'
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Días</FormLabel>
                     <Select value={field.value.length ? 'placeholder' : undefined}>
-                      <FormGroup>
-                        <FormControl>
-                          <SelectTrigger variant='field'>
-                            <SelectValue placeholder='' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <FormLabel variant='field'>Días*</FormLabel>
-                      </FormGroup>
+                      <FormControl>
+                        <SelectTrigger className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'>
+                          <SelectValue placeholder='Seleccionar días' />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent className='relative [&>div]:gap-y-2.5'>
                         <SelectItem value='placeholder' className='hidden'>
                           {formatSelectedDays(field.value, { short: true })}
@@ -542,12 +529,15 @@ function CreatePromotionDrawer() {
                 name='description'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Textarea placeholder='' {...field} value={field.value ?? ''} />
-                      </FormControl>
-                      <FormLabel variant='field'>Descripción</FormLabel>
-                    </FormGroup>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Descripción</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder='Breve descripción de la promoción...'
+                        {...field}
+                        value={field.value ?? ''}
+                        className='min-h-[100px] rounded-[24px] border-neutral-200 bg-neutral-50 px-4 py-3 hover:bg-neutral-100 focus:ring-primary-500/20 resize-none'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -568,7 +558,11 @@ function CreatePromotionDrawer() {
                         {...field}
                       />
                     </FormControl>
-                    <UploaderButton onClick={() => imagesRef.current?.click()} placeholder='Subir imagen' />
+                    <UploaderButton
+                      onClick={() => imagesRef.current?.click()}
+                      placeholder='Subir imagen'
+                      className='rounded-[24px] border-2 border-dashed border-neutral-200 bg-neutral-50 hover:bg-neutral-100 hover:border-primary-400'
+                    />
                     {hasSelectedImages && (
                       <PreviewImagesList
                         multiple={false}
@@ -582,9 +576,25 @@ function CreatePromotionDrawer() {
                 )}
               />
             </DrawerHeader>
-            <Button type='submit' size='medium' disabled={isSubmitting}>
-              {isSubmitting ? <LoaderIcon className='size-4 animate-spin' /> : 'Crear promoción'}
-            </Button>
+            <div className='flex flex-col gap-3'>
+              <DrawerClose asChild>
+                <Button
+                  variant='ghost'
+                  size='md'
+                  className='w-full rounded-full text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
+                >
+                  Cancelar
+                </Button>
+              </DrawerClose>
+              <Button
+                type='submit'
+                size='md'
+                disabled={isSubmitting}
+                className='w-full rounded-full !bg-[#fa5252] hover:!bg-[#f03e3e] text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300'
+              >
+                {isSubmitting ? <LoaderIcon className='size-4 animate-spin' /> : 'Crear promoción'}
+              </Button>
+            </div>
           </form>
         </Form>
       </DrawerContent>

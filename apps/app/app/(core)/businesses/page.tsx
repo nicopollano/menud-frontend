@@ -4,7 +4,7 @@ import { BusinessSummary } from '@/modules/businesses/components/summary/busines
 
 function BusinessesPage() {
   return (
-    <section className='flex flex-col gap-y-[1.875rem]'>
+    <section className='flex flex-col gap-y-8'>
       <BusinessSummary />
       <BusinessCardList />
     </section>

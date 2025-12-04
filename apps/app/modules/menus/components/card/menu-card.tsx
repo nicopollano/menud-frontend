@@ -11,68 +11,251 @@ import { Badge } from '@ristokit/ui/components/badge'
 import { EditIcon } from '@ristokit/ui/icons/edit.icon'
 import { MoveIcon } from '@ristokit/ui/icons/move.icon'
 import { RemoveIcon } from '@ristokit/ui/icons/remove.icon'
+import { cn } from '@ristokit/ui/lib/utils'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 interface MenuCardProps {
   menu: Menu
+  index?: number
 }
 
-function MenuCard({ menu }: MenuCardProps) {
+function MenuCard({ menu, index = 0 }: MenuCardProps) {
   const { businessId, branchId } = useNavigationParams()
   const router = useRouter()
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+
   const navigateTo = (to: string) => router.push(to)
 
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      navigateTo(ROUTES.BRANCH_MENU(businessId, branchId, menu.id))
+    }
+  }
+
+  const categoriesCount = menu.summary?.totalCategories || 0
+  const productsCount = menu.summary?.totalProducts || 0
+  const categoriesText = pluralize({ count: categoriesCount, singular: 'categoría', plural: 'categorías' })
+  const productsText = pluralize({ count: productsCount, singular: 'producto', plural: 'productos' })
+
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <article
       onClick={() => navigateTo(ROUTES.BRANCH_MENU(businessId, branchId, menu.id))}
-      className='grid cursor-pointer gap-y-5 rounded-sm bg-gray-light px-4 py-5'
+      onKeyDown={handleKeyPress}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      role='button'
+      tabIndex={0}
+      aria-label={`${menu.name}, ${categoriesCount} ${categoriesText}, ${productsCount} ${productsText}, ${menu.enabled ? 'Activo' : 'Inactivo'}`}
+      className={cn(
+        'group relative cursor-pointer overflow-hidden',
+        'bg-white rounded-[32px]',
+        'p-6 md:p-8',
+        'shadow-xl shadow-neutral-200/50',
+        'transition-all duration-300 ease-out',
+        'hover:shadow-2xl hover:shadow-primary-500/10 hover:-translate-y-1',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+        'animate-fade-in'
+      )}
+      style={{ animationDelay: `${index * 50}ms` }}
     >
-      <div className='flex items-center justify-between gap-x-2'>
-        <div className='relative size-[3.875rem] rounded-sm bg-secondary'>
-          <Image
-            src={menu.logo || '#'}
-            alt={menu.name}
-            fill
-            className='overflow-hidden rounded-sm object-cover object-center'
-          />
+      <div className='relative flex flex-col md:flex-row items-start gap-6 md:gap-8'>
+        {/* Logo Container - Forced Rounded */}
+        <div className='relative shrink-0'>
+          <div
+            className={cn(
+              'relative size-24 md:size-28 lg:size-32',
+              'rounded-[32px] overflow-hidden',
+              'bg-neutral-50',
+              'transition-all duration-300',
+              'group-hover:shadow-lg group-hover:shadow-primary-500/10',
+              isHovered && 'scale-105'
+            )}
+          >
+            <Image
+              src={menu.logo || '#'}
+              alt={`Logo de ${menu.name}`}
+              fill
+              className={cn(
+                'object-cover object-center',
+                'transition-all duration-500',
+                !imageLoaded && 'opacity-0 scale-110'
+              )}
+              onLoad={() => setImageLoaded(true)}
+              sizes='(max-width: 768px) 96px, (max-width: 1024px) 112px, 128px'
+              priority={index < 2}
+            />
+            {!imageLoaded && <div className='absolute inset-0 skeleton-pulse' />}
+          </div>
+
+          {/* Status indicator dot */}
+          <div className='absolute -bottom-2 -right-2'>
+            <div className={cn('relative size-8 rounded-full bg-white flex items-center justify-center', 'shadow-md')}>
+              <div
+                className={cn(
+                  'size-4 rounded-full transition-colors duration-300',
+                  menu.enabled ? 'bg-success-500 shadow-[0_0_10px_rgba(16,185,129,0.4)]' : 'bg-neutral-300'
+                )}
+              />
+            </div>
+          </div>
         </div>
-        {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-        <div onClick={(ev) => ev.stopPropagation()} className='flex items-center gap-x-5'>
-          <MoveMenuDrawer menu={menu}>
-            <button type='button'>
-              <MoveIcon className='size-6 stroke-text' />
-            </button>
-          </MoveMenuDrawer>
-          <CopyMenuButton menu={menu} />
-          <UpdateMenuDrawer menu={menu}>
-            <button type='button'>
-              <EditIcon className='size-6 stroke-text' />
-            </button>
-          </UpdateMenuDrawer>
-          <DeleteMenuAlertDialog menu={menu}>
-            <button type='button'>
-              <RemoveIcon className='size-6 stroke-text' />
-            </button>
-          </DeleteMenuAlertDialog>
+
+        {/* Content */}
+        <div className='flex-1 min-w-0 space-y-4 md:space-y-5'>
+          {/* Header with title and actions */}
+          <div className='flex items-start justify-between gap-4'>
+            <div className='flex-1 min-w-0 space-y-2'>
+              <h3
+                className={cn(
+                  'text-2xl md:text-3xl font-bold',
+                  'text-neutral-900 line-clamp-1',
+                  'transition-colors duration-200',
+                  'group-hover:text-primary-600'
+                )}
+              >
+                {menu.name}
+              </h3>
+
+              {/* Categories and Products badges */}
+              <div className='flex items-center gap-2 flex-wrap'>
+                {/* Categories badge */}
+                <div
+                  className={cn(
+                    'inline-flex items-center gap-2.5',
+                    'px-4 py-2 rounded-full',
+                    'bg-neutral-50',
+                    'transition-all duration-200',
+                    'group-hover:bg-warning-50'
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'flex items-center justify-center',
+                      'size-6 rounded-full',
+                      'bg-white shadow-sm text-warning-600',
+                      'text-xs font-bold',
+                      'transition-all duration-200',
+                      'group-hover:scale-110'
+                    )}
+                  >
+                    {categoriesCount}
+                  </div>
+                  <span className='text-sm font-semibold text-neutral-600 group-hover:text-warning-700 transition-colors'>
+                    {categoriesText}
+                  </span>
+                </div>
+
+                {/* Products badge */}
+                <div
+                  className={cn(
+                    'inline-flex items-center gap-2.5',
+                    'px-4 py-2 rounded-full',
+                    'bg-neutral-50',
+                    'transition-all duration-200',
+                    'group-hover:bg-primary-50'
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'flex items-center justify-center',
+                      'size-6 rounded-full',
+                      'bg-white shadow-sm text-primary-600',
+                      'text-xs font-bold',
+                      'transition-all duration-200',
+                      'group-hover:scale-110'
+                    )}
+                  >
+                    {productsCount}
+                  </div>
+                  <span className='text-sm font-semibold text-neutral-600 group-hover:text-primary-700 transition-colors'>
+                    {productsText}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Action buttons - Round Buttons */}
+            <div
+              className='flex items-center gap-2'
+              onClick={(ev) => ev.stopPropagation()}
+              role='group'
+              aria-label='Acciones del menú'
+            >
+              <MoveMenuDrawer menu={menu}>
+                <button
+                  type='button'
+                  className={cn(
+                    'p-3 rounded-full',
+                    'bg-white border border-neutral-200 shadow-sm',
+                    'text-neutral-600',
+                    'transition-all duration-200',
+                    'hover:bg-info-50 hover:text-info-600 hover:border-info-200 hover:shadow-lg hover:shadow-info-500/10 hover:-translate-y-0.5',
+                    'active:scale-95',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info-500 focus-visible:ring-offset-1'
+                  )}
+                  aria-label={`Mover ${menu.name}`}
+                >
+                  <MoveIcon className='size-5' stroke='currentColor' />
+                </button>
+              </MoveMenuDrawer>
+              <CopyMenuButton menu={menu} />
+              <UpdateMenuDrawer menu={menu}>
+                <button
+                  type='button'
+                  className={cn(
+                    'p-3 rounded-full',
+                    'bg-white border border-neutral-200 shadow-sm',
+                    'text-neutral-600',
+                    'transition-all duration-200',
+                    'hover:bg-primary-50 hover:text-primary-600 hover:border-primary-200 hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-0.5',
+                    'active:scale-95',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1'
+                  )}
+                  aria-label={`Editar ${menu.name}`}
+                >
+                  <EditIcon className='size-5' stroke='currentColor' />
+                </button>
+              </UpdateMenuDrawer>
+              <DeleteMenuAlertDialog menu={menu}>
+                <button
+                  type='button'
+                  className={cn(
+                    'p-3 rounded-full',
+                    'bg-white border border-neutral-200 shadow-sm',
+                    'text-neutral-600',
+                    'transition-all duration-200',
+                    'hover:bg-error-50 hover:text-error-600 hover:border-error-200 hover:shadow-lg hover:shadow-error-500/10 hover:-translate-y-0.5',
+                    'active:scale-95',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error-500 focus-visible:ring-offset-1'
+                  )}
+                  aria-label={`Eliminar ${menu.name}`}
+                >
+                  <RemoveIcon className='size-5' stroke='currentColor' />
+                </button>
+              </DeleteMenuAlertDialog>
+            </div>
+          </div>
+
+          {/* Description */}
+          {menu.description && (
+            <p className='text-base text-neutral-500 leading-relaxed line-clamp-2 font-medium'>{menu.description}</p>
+          )}
+
+          {/* Footer with badge */}
+          <div className='flex items-center gap-3 pt-2'>
+            <Badge
+              variant={menu.enabled ? 'default' : 'disabled'}
+              className='text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm border-none'
+            >
+              {menu.enabled ? 'Activo' : 'Inactivo'}
+            </Badge>
+          </div>
         </div>
       </div>
-      <Badge variant={menu.enabled ? 'default' : 'disabled'}>{menu.enabled ? 'Activo' : 'Inactivo'}</Badge>
-      <footer className='grid gap-y-2.5'>
-        <h3 className='flex flex-wrap items-center gap-x-2.5 gap-y-1 text-heading-mobile-3 text-text'>
-          {menu.name}{' '}
-          <span className='text-body-mobile-4 text-gray-dark'>
-            ({menu.summary?.totalCategories}){' '}
-            {pluralize({ count: menu.summary?.totalCategories || 0, singular: 'categoría', plural: 'categorías' })}
-          </span>{' '}
-          <span className='text-body-mobile-4 text-gray-dark'>
-            ({menu.summary?.totalProducts}){' '}
-            {pluralize({ count: menu.summary?.totalProducts || 0, singular: 'producto', plural: 'productos' })}
-          </span>
-        </h3>
-        <p className='line-clamp-3 text-body-mobile-3 text-gray-dark'>{menu.description}</p>
-      </footer>
     </article>
   )
 }

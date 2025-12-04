@@ -2,7 +2,6 @@
 import { OverlayMotion } from '@/modules/shared/components/overlay/overlay-motion'
 import { useToggle } from '@/modules/shared/hooks/use-toggle'
 import { Button } from '@ristokit/ui/components/button'
-import { PlusIcon } from '@ristokit/ui/icons/plus.icon'
 import { cn } from '@ristokit/ui/lib/utils'
 import { AnimatePresence, type HTMLMotionProps, type Variants, motion } from 'framer-motion'
 
@@ -48,8 +47,9 @@ function MoreActionsWidget({ actions }: MoreActionsWidgetProps) {
     <>
       <OverlayMotion visible={isOpenMenu} />
       <div
+        style={{ zIndex: 10000 }}
         className={cn(
-          'pointer-events-none fixed right-4 bottom-[10rem] z-50 flex flex-col items-end gap-y-2.5',
+          'pointer-events-none fixed right-4 bottom-[10rem] flex flex-col items-end gap-y-2.5',
           isOpenMenu && 'pointer-events-auto'
         )}
       >
@@ -75,11 +75,28 @@ function MoreActionsWidget({ actions }: MoreActionsWidgetProps) {
       </div>
       <Button
         onClick={toggleMenu}
-        className={cn('fixed right-4 bottom-[4.375rem] z-50 size-20 rounded-full', isOpenMenu && 'bg-text')}
+        variant='primary'
+        style={{ zIndex: 10000, backgroundColor: isOpenMenu ? 'white' : '#fa5252' }}
+        className={cn(
+          'fixed right-4 bottom-[4.375rem] size-20 rounded-full',
+          'shadow-xl hover:shadow-2xl',
+          'transition-all duration-300',
+          // Default state (Closed): Red bg, White icon
+          !isOpenMenu && '!text-white border-none',
+          // Active state (Open): White bg, Dark icon, Border
+          isOpenMenu && 'rotate-45 !text-neutral-900 border-2 border-neutral-200 hover:!bg-neutral-50'
+        )}
       >
-        <PlusIcon
-          className={cn('size-12 stroke-1 stroke-background transition duration-300', isOpenMenu && '-rotate-45')}
-        />
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          fill='none'
+          viewBox='0 0 24 24'
+          strokeWidth={3}
+          stroke='currentColor'
+          className='size-10'
+        >
+          <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
+        </svg>
       </Button>
     </>
   )

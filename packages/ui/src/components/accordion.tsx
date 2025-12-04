@@ -11,7 +11,7 @@ function AccordionItem({ className, ...props }: React.ComponentProps<typeof Acco
   return (
     <AccordionPrimitive.Item
       data-slot='accordion-item'
-      className={cn('border-b last:border-b-0', className)}
+      className={cn('border-b-2 border-neutral-200 last:border-b-0', 'transition-colors duration-200', className)}
       {...props}
     />
   )
@@ -22,7 +22,20 @@ function AccordionTrigger({ className, children, ...props }: React.ComponentProp
     <AccordionPrimitive.Trigger
       data-slot='accordion-trigger'
       className={cn(
-        'flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left font-medium text-sm outline-none transition-all hover:underline focus-visible:border-neutral-950 focus-visible:ring-[0.1875rem] focus-visible:ring-neutral-950/50 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:border-neutral-300 dark:focus-visible:ring-neutral-300/50 [&[data-state=open]>svg]:rotate-180',
+        // Layout & spacing - 2025 modern
+        'flex flex-1 items-center justify-between gap-3',
+        'py-4 md:py-5',
+        'text-left',
+        // Typography
+        'text-base md:text-lg font-semibold text-text',
+        // States
+        'outline-none transition-all duration-300 ease-out',
+        'hover:text-primary-600',
+        'focus-visible:text-primary-600 focus-visible:ring-2 focus-visible:ring-primary-500/20',
+        'disabled:pointer-events-none disabled:opacity-60',
+        // Icon rotation
+        '[&[data-state=open]>svg]:rotate-180',
+        '[&>svg]:size-5 [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-300',
         className
       )}
       {...props}
@@ -36,10 +49,10 @@ function AccordionContent({ className, children, ...props }: React.ComponentProp
   return (
     <AccordionPrimitive.Content
       data-slot='accordion-content'
-      className='overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down'
+      className='overflow-hidden text-sm md:text-base text-neutral-700 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down'
       {...props}
     >
-      <div className={cn('pt-0 pb-4', className)}>{children}</div>
+      <div className={cn('pt-0 pb-4 md:pb-5 leading-relaxed', className)}>{children}</div>
     </AccordionPrimitive.Content>
   )
 }

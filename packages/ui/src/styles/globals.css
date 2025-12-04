@@ -5,6 +5,11 @@
 
 @import 'tw-animate-css';
 
+/* Import custom design system */
+@import './design-tokens.css';
+@import './animations.css';
+@import './utilities.css';
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -157,16 +162,18 @@
   /* Colors */
   --color-*: initial;
   --color-background: #ffffff;
-  --color-primary: #ff852d;
-  --color-secondary: #ffecd4;
-  --color-text: #080808;
-  --color-gray: #b6b6b6;
-  --color-gray-light: #f2f2f2;
-  --color-gray-dark: #808080;
-  --color-error: #b5210b;
-  --color-error-200: #ffcbc3;
-  --color-warning: #ffae42;
-  --color-success: #1db954;
+  --color-primary: #C82020;
+  --color-primary-dark: #9B1818;
+  --color-secondary: #1a1a1a;
+  --color-accent: #f5f5f5;
+  --color-text: #1a1a1a;
+  --color-gray: #6b6b6b;
+  --color-gray-light: #f8f8f8;
+  --color-gray-dark: #404040;
+  --color-error: #ef4444;
+  --color-error-200: #fecaca;
+  --color-warning: #f59e0b;
+  --color-success: #10b981;
 
   /* Borders */
   --radius-*: initial;
@@ -236,3 +243,76 @@
     -moz-appearance: none;
   }
 }
+
+/* ============================================
+   UX OPTIMIZATIONS - Smooth scrolling & polish
+   ============================================ */
+
+/* Smooth scroll behavior for the entire app */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduce motion for users who prefer it (accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Better focus outlines for accessibility */
+*:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline when using mouse */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Improve text rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+  overflow-x: hidden;
+}
+
+/* Smooth image loading with fade-in */
+img {
+  transition: opacity 0.3s ease-in-out;
+}
+
+img[loading="lazy"]:not([src]) {
+  opacity: 0;
+}
+
+/* Better tap targets on mobile (min 44x44px for accessibility) */
+@media (hover: none) {
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Custom selection color */
+::selection {
+  background-color: var(--color-primary-200, #fecaca);
+  color: var(--color-primary-900, #7f1d1d);
+}
+
+/* (Removed temporary normalization rule — inline SVGs now use the correct colors) */

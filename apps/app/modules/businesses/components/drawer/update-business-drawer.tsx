@@ -16,6 +16,7 @@ import { AlertError } from '@ristokit/ui/components/alert'
 import { Button, UploaderButton } from '@ristokit/ui/components/button'
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerHandle,
   DrawerHeader,
@@ -142,12 +143,14 @@ function UpdateBusinessDrawer({ business, children }: UpdateBusinessDrawerProps)
                 name='name'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Input placeholder='' variant='field' {...field} />
-                      </FormControl>
-                      <FormLabel variant='field'>Nombre*</FormLabel>
-                    </FormGroup>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Nombre</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Ej: Mi Restaurante'
+                        {...field}
+                        className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -157,12 +160,15 @@ function UpdateBusinessDrawer({ business, children }: UpdateBusinessDrawerProps)
                 name='description'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Textarea placeholder='' {...field} value={field.value ?? ''} />
-                      </FormControl>
-                      <FormLabel variant='field'>Descripción</FormLabel>
-                    </FormGroup>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Descripción</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder='Breve descripción del restaurante...'
+                        {...field}
+                        value={field.value ?? ''}
+                        className='min-h-[100px] rounded-[24px] border-neutral-200 bg-neutral-50 px-4 py-3 hover:bg-neutral-100 focus:ring-primary-500/20 resize-none'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -183,7 +189,11 @@ function UpdateBusinessDrawer({ business, children }: UpdateBusinessDrawerProps)
                         {...field}
                       />
                     </FormControl>
-                    <UploaderButton onClick={() => imagesRef.current?.click()} placeholder='Subir logo' />
+                    <UploaderButton
+                      onClick={() => imagesRef.current?.click()}
+                      placeholder='Subir logo'
+                      className='rounded-[24px] border-2 border-dashed border-neutral-200 bg-neutral-50 hover:bg-neutral-100 hover:border-primary-400'
+                    />
                     {hasSelectedImages && (
                       <PreviewImagesList
                         multiple={false}
@@ -197,9 +207,25 @@ function UpdateBusinessDrawer({ business, children }: UpdateBusinessDrawerProps)
                 )}
               />
             </DrawerHeader>
-            <Button type='submit' size='medium' disabled={isSubmitting || !isDirty}>
-              {isSubmitting ? <LoaderIcon className='size-4 animate-spin' /> : 'Guardar cambios'}
-            </Button>
+            <div className='flex flex-col gap-3'>
+              <DrawerClose asChild>
+                <Button
+                  variant='ghost'
+                  size='md'
+                  className='w-full rounded-full text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
+                >
+                  Cancelar
+                </Button>
+              </DrawerClose>
+              <Button
+                type='submit'
+                size='md'
+                disabled={isSubmitting || !isDirty}
+                className='w-full rounded-full !bg-[#fa5252] hover:!bg-[#f03e3e] text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300'
+              >
+                {isSubmitting ? <LoaderIcon className='size-4 animate-spin' /> : 'Guardar cambios'}
+              </Button>
+            </div>
           </form>
         </Form>
       </DrawerContent>

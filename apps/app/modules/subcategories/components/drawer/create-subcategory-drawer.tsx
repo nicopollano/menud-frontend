@@ -18,6 +18,7 @@ import { AlertError } from '@ristokit/ui/components/alert'
 import { Button, UploaderButton } from '@ristokit/ui/components/button'
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerHandle,
   DrawerHeader,
@@ -39,7 +40,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from '@ristokit/ui/components/sonner'
 import { Textarea } from '@ristokit/ui/components/textarea'
 import { LineIcon } from '@ristokit/ui/icons/line.icon'
-import { LoaderIcon } from 'lucide-react'
+import { LoaderIcon, TagIcon } from 'lucide-react'
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -141,9 +142,17 @@ function CreateSubcategoryDrawer() {
       }}
     >
       <DrawerTrigger asChild>
-        <Button variant='outline' size='small'>
-          Agregar subcategoría
-        </Button>
+        <button
+          style={{ backgroundColor: 'white' }}
+          className='relative z-10 group flex items-center gap-3 rounded-full !bg-white p-1.5 pr-4 shadow-[0_4px_20px_rgb(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 hover:!bg-[#fa5252] hover:border-white transition-all duration-300 border border-neutral-100'
+        >
+          <div className='flex size-8 items-center justify-center rounded-full bg-primary-50 text-primary-600 group-hover:!bg-white group-hover:!text-[#fa5252] transition-all duration-300'>
+            <TagIcon className='size-4' strokeWidth={2.5} />
+          </div>
+          <span className='text-sm font-semibold text-neutral-600 group-hover:text-white transition-colors duration-300'>
+            Agregar subcategoría
+          </span>
+        </button>
       </DrawerTrigger>
       <DrawerContent>
         <Form {...form}>
@@ -162,15 +171,13 @@ function CreateSubcategoryDrawer() {
                 name='categoryId'
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Categoría</FormLabel>
                     <Select value={field.value} defaultValue={field.value} onValueChange={field.onChange}>
-                      <FormGroup>
-                        <FormControl>
-                          <SelectTrigger variant='field'>
-                            <SelectValue placeholder='' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <FormLabel variant='field'>Categoría*</FormLabel>
-                      </FormGroup>
+                      <FormControl>
+                        <SelectTrigger className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'>
+                          <SelectValue placeholder='Seleccionar categoría' />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
                         {isLoadingCategories && 'Cargando categorías...'}
                         {!isLoadingCategories && !categories?.length && 'Sin categorías'}
@@ -190,13 +197,15 @@ function CreateSubcategoryDrawer() {
                 name='name'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Input placeholder='' variant='field' {...field} />
-                      </FormControl>
-                      <FormLabel variant='field'>Nombre*</FormLabel>
-                    </FormGroup>
-                    <FormDescription>Ejemplo: Bebidas, Entrada, etc.</FormDescription>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Nombre</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Ej: Bebidas, Entrada, etc.'
+                        variant='field'
+                        {...field}
+                        className='h-12 rounded-full border-neutral-200 bg-neutral-50 px-4 hover:bg-neutral-100 focus:ring-primary-500/20'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -206,12 +215,15 @@ function CreateSubcategoryDrawer() {
                 name='description'
                 render={({ field }) => (
                   <FormItem>
-                    <FormGroup>
-                      <FormControl>
-                        <Textarea placeholder='' {...field} value={field.value ?? ''} />
-                      </FormControl>
-                      <FormLabel variant='field'>Descripción</FormLabel>
-                    </FormGroup>
+                    <FormLabel className='text-base font-semibold text-neutral-900 ml-1'>Descripción</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder='Breve descripción de la subcategoría...'
+                        {...field}
+                        value={field.value ?? ''}
+                        className='min-h-[100px] rounded-[24px] border-neutral-200 bg-neutral-50 px-4 py-3 hover:bg-neutral-100 focus:ring-primary-500/20 resize-none'
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -232,7 +244,11 @@ function CreateSubcategoryDrawer() {
                         {...field}
                       />
                     </FormControl>
-                    <UploaderButton onClick={() => imagesRef.current?.click()} placeholder='Subir imagen' />
+                    <UploaderButton
+                      onClick={() => imagesRef.current?.click()}
+                      placeholder='Subir imagen'
+                      className='rounded-[24px] border-2 border-dashed border-neutral-200 bg-neutral-50 hover:bg-neutral-100 hover:border-primary-400'
+                    />
                     {hasSelectedImages && (
                       <PreviewImagesList
                         multiple={false}
@@ -246,9 +262,25 @@ function CreateSubcategoryDrawer() {
                 )}
               />
             </DrawerHeader>
-            <Button type='submit' size='medium' disabled={isSubmitting}>
-              {isSubmitting ? <LoaderIcon className='size-4 animate-spin' /> : 'Crear subcategoría'}
-            </Button>
+            <div className='flex flex-col gap-3'>
+              <DrawerClose asChild>
+                <Button
+                  variant='ghost'
+                  size='md'
+                  className='w-full rounded-full text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
+                >
+                  Cancelar
+                </Button>
+              </DrawerClose>
+              <Button
+                type='submit'
+                size='md'
+                disabled={isSubmitting}
+                className='w-full rounded-full !bg-[#fa5252] hover:!bg-[#f03e3e] text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300'
+              >
+                {isSubmitting ? <LoaderIcon className='size-4 animate-spin' /> : 'Crear subcategoría'}
+              </Button>
+            </div>
           </form>
         </Form>
       </DrawerContent>
