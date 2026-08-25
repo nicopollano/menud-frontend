@@ -19,37 +19,40 @@ function DropdownMenuTrigger({ ...props }: React.ComponentProps<typeof DropdownM
 function DropdownMenuContent({
   className,
   sideOffset = 4,
+  portal = true,
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
-  return (
-    <DropdownMenuPrimitive.Portal>
-      <DropdownMenuPrimitive.Content
-        data-slot='dropdown-menu-content'
-        sideOffset={sideOffset}
-        className={cn(
-          // Position & layout - 2025 modern
-          'z-50 min-w-[12rem]',
-          'max-h-[var(--radix-dropdown-menu-content-available-height)]',
-          'origin-[var(--radix-dropdown-menu-content-transform-origin)]',
-          'overflow-y-auto overflow-x-hidden',
-          // Modern styling
-          'rounded-xl border-2 border-neutral-200',
-          'bg-background p-1.5',
-          'shadow-soft-lg',
-          // Animations
-          'data-[state=closed]:animate-out data-[state=open]:animate-in',
-          'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-          'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-          'data-[side=bottom]:slide-in-from-top-2',
-          'data-[side=left]:slide-in-from-right-2',
-          'data-[side=right]:slide-in-from-left-2',
-          'data-[side=top]:slide-in-from-bottom-2',
-          className
-        )}
-        {...props}
-      />
-    </DropdownMenuPrimitive.Portal>
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Content> & { portal?: boolean }) {
+  const Content = (
+    <DropdownMenuPrimitive.Content
+      data-slot='dropdown-menu-content'
+      sideOffset={sideOffset}
+      className={cn(
+        // Position & layout - 2025 modern
+        'z-50 min-w-[12rem]',
+        'max-h-[var(--radix-dropdown-menu-content-available-height)]',
+        'origin-[var(--radix-dropdown-menu-content-transform-origin)]',
+        'overflow-y-auto overflow-x-hidden',
+        // Modern styling
+        'rounded-xl border-2 border-neutral-200',
+        'bg-background p-1.5',
+        'shadow-soft-lg',
+        // Animations
+        'data-[state=closed]:animate-out data-[state=open]:animate-in',
+        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+        'data-[side=bottom]:slide-in-from-top-2',
+        'data-[side=left]:slide-in-from-right-2',
+        'data-[side=right]:slide-in-from-left-2',
+        'data-[side=top]:slide-in-from-bottom-2',
+        className
+      )}
+      {...props}
+    />
   )
+
+  if (!portal) return Content
+
+  return <DropdownMenuPrimitive.Portal>{Content}</DropdownMenuPrimitive.Portal>
 }
 
 function DropdownMenuGroup({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Group>) {

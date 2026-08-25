@@ -58,11 +58,11 @@ function SignInForm() {
                   <FormControl>
                     <Input
                       placeholder='nombre@empresa.com'
-                      className='peer h-10 rounded-none border-0 border-b-2 border-neutral-200 bg-transparent px-0 text-base shadow-none transition-all duration-200 focus:border-primary-500 focus:ring-0'
+                      className='peer h-12 rounded-xl border-2 border-neutral-200 bg-white px-4 pr-12 text-base shadow-none transition-all duration-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/10'
                       {...field}
                     />
                   </FormControl>
-                  <div className='pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-neutral-400 peer-focus:text-primary-500'>
+                  <div className='pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 peer-focus:text-primary-500 transition-colors'>
                     <MailIcon className='size-5' />
                   </div>
                 </div>
@@ -83,14 +83,14 @@ function SignInForm() {
                     <Input
                       type={showPassword ? 'text' : 'password'}
                       placeholder='••••••••'
-                      className='peer h-10 rounded-none border-0 border-b-2 border-neutral-200 bg-transparent px-0 pr-8 text-base shadow-none transition-all duration-200 focus:border-primary-500 focus:ring-0'
+                      className='peer h-12 rounded-xl border-2 border-neutral-200 bg-white px-4 pr-12 text-base shadow-none transition-all duration-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/10'
                       {...field}
                     />
                   </FormControl>
                   <button
                     type='button'
                     onClick={() => setShowPassword(!showPassword)}
-                    className='absolute right-0 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors'
+                    className='absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors'
                   >
                     {showPassword ? <EyeOffIcon className='size-5' /> : <EyeIcon className='size-5' />}
                   </button>

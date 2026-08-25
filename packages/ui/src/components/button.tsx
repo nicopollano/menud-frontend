@@ -188,11 +188,14 @@ function MenuButton({
       <Comp
         data-slot='menu-button'
         className={cn(
-          'h-9 md:h-10 px-4 md:px-5 py-2',
-          'text-sm md:text-base font-medium',
-          'text-neutral-600 transition-all duration-200',
-          'hover:text-neutral-900',
-          isActive && 'text-primary-600',
+          'relative z-10',
+          'h-10 md:h-11 px-6 md:px-8 py-2',
+          'text-base font-bold tracking-wide',
+          'rounded-full',
+          'transition-all duration-300 ease-out',
+          isActive 
+            ? 'text-[#c92a2a]' // Dark red text
+            : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100',
           className
         )}
         {...props}
@@ -202,11 +205,27 @@ function MenuButton({
           layoutId='menu-button-indicator'
           className={cn(
             'pointer-events-none absolute inset-0',
-            'rounded-lg border-2 border-primary-500',
-            'bg-primary-50/30 shadow-soft-sm'
+            'bg-[#fff5f5]', // Light red background
+            'rounded-full'
           )}
           transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-        />
+        >
+          {/* Left Semicircle - Black Border */}
+          <span className={cn(
+            'absolute left-0 top-0 bottom-0',
+            'h-full aspect-[1/2]',
+            'rounded-l-full',
+            'border-2 border-neutral-900 border-r-0'
+          )} />
+          
+          {/* Right Semicircle - Black Border */}
+          <span className={cn(
+            'absolute right-0 top-0 bottom-0',
+            'h-full aspect-[1/2]',
+            'rounded-r-full',
+            'border-2 border-neutral-900 border-l-0'
+          )} />
+        </motion.span>
       )}
     </div>
   )

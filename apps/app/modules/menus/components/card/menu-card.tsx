@@ -11,6 +11,7 @@ import { Badge } from '@ristokit/ui/components/badge'
 import { EditIcon } from '@ristokit/ui/icons/edit.icon'
 import { MoveIcon } from '@ristokit/ui/icons/move.icon'
 import { RemoveIcon } from '@ristokit/ui/icons/remove.icon'
+import { CategoryIcon } from '@ristokit/ui/icons/category.icon'
 import { cn } from '@ristokit/ui/lib/utils'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -69,26 +70,33 @@ function MenuCard({ menu, index = 0 }: MenuCardProps) {
             className={cn(
               'relative size-24 md:size-28 lg:size-32',
               'rounded-[32px] overflow-hidden',
-              'bg-neutral-50',
+              'bg-neutral-100',
               'transition-all duration-300',
               'group-hover:shadow-lg group-hover:shadow-primary-500/10',
-              isHovered && 'scale-105'
+              isHovered && 'scale-105',
+              !menu.logo && 'flex items-center justify-center'
             )}
           >
-            <Image
-              src={menu.logo || '#'}
-              alt={`Logo de ${menu.name}`}
-              fill
-              className={cn(
-                'object-cover object-center',
-                'transition-all duration-500',
-                !imageLoaded && 'opacity-0 scale-110'
-              )}
-              onLoad={() => setImageLoaded(true)}
-              sizes='(max-width: 768px) 96px, (max-width: 1024px) 112px, 128px'
-              priority={index < 2}
-            />
-            {!imageLoaded && <div className='absolute inset-0 skeleton-pulse' />}
+            {menu.logo ? (
+              <>
+                <Image
+                  src={menu.logo}
+                  alt={`Logo de ${menu.name}`}
+                  fill
+                  className={cn(
+                    'object-cover object-center',
+                    'transition-all duration-500',
+                    !imageLoaded && 'opacity-0 scale-110'
+                  )}
+                  onLoad={() => setImageLoaded(true)}
+                  sizes='(max-width: 768px) 96px, (max-width: 1024px) 112px, 128px'
+                  priority={index < 2}
+                />
+                {!imageLoaded && <div className='absolute inset-0 skeleton-pulse' />}
+              </>
+            ) : (
+              <CategoryIcon className='size-12 md:size-14 lg:size-16 text-neutral-400' />
+            )}
           </div>
 
           {/* Status indicator dot */}
@@ -190,10 +198,9 @@ function MenuCard({ menu, index = 0 }: MenuCardProps) {
                   type='button'
                   className={cn(
                     'p-3 rounded-full',
-                    'bg-white border border-neutral-200 shadow-sm',
-                    'text-neutral-600',
+                    'bg-neutral-100 text-neutral-600', // Borderless, higher contrast bg
                     'transition-all duration-200',
-                    'hover:bg-info-50 hover:text-info-600 hover:border-info-200 hover:shadow-lg hover:shadow-info-500/10 hover:-translate-y-0.5',
+                    'hover:bg-info-100 hover:text-info-700 hover:shadow-lg hover:shadow-info-500/10 hover:-translate-y-0.5',
                     'active:scale-95',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info-500 focus-visible:ring-offset-1'
                   )}
@@ -202,16 +209,15 @@ function MenuCard({ menu, index = 0 }: MenuCardProps) {
                   <MoveIcon className='size-5' stroke='currentColor' />
                 </button>
               </MoveMenuDrawer>
-              <CopyMenuButton menu={menu} />
+              <CopyMenuButton menu={menu} className='!bg-neutral-100 !border-none hover:!bg-warning-100' />
               <UpdateMenuDrawer menu={menu}>
                 <button
                   type='button'
                   className={cn(
                     'p-3 rounded-full',
-                    'bg-white border border-neutral-200 shadow-sm',
-                    'text-neutral-600',
+                    'bg-neutral-100 text-neutral-600', // Borderless, high contrast
                     'transition-all duration-200',
-                    'hover:bg-primary-50 hover:text-primary-600 hover:border-primary-200 hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-0.5',
+                    'hover:bg-primary-100 hover:text-primary-700 hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-0.5',
                     'active:scale-95',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1'
                   )}
@@ -225,10 +231,9 @@ function MenuCard({ menu, index = 0 }: MenuCardProps) {
                   type='button'
                   className={cn(
                     'p-3 rounded-full',
-                    'bg-white border border-neutral-200 shadow-sm',
-                    'text-neutral-600',
+                    'bg-neutral-100 text-neutral-600', // Borderless, high contrast
                     'transition-all duration-200',
-                    'hover:bg-error-50 hover:text-error-600 hover:border-error-200 hover:shadow-lg hover:shadow-error-500/10 hover:-translate-y-0.5',
+                    'hover:bg-error-100 hover:text-error-700 hover:shadow-lg hover:shadow-error-500/10 hover:-translate-y-0.5',
                     'active:scale-95',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error-500 focus-visible:ring-offset-1'
                   )}

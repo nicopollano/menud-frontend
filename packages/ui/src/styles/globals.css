@@ -160,7 +160,7 @@
   --text-button-mobile-small--font-weight: 600;
 
   /* Colors */
-  --color-*: initial;
+  /* --color-*: initial; Removed to allow design-tokens inheritance */
   --color-background: #ffffff;
   --color-primary: #C82020;
   --color-primary-dark: #9B1818;
@@ -176,7 +176,7 @@
   --color-success: #10b981;
 
   /* Borders */
-  --radius-*: initial;
+  /* --radius-*: initial; Removed to allow standard radii */
   --radius-inherit: inherit;
   --radius-xs: 0.625rem;
   --radius-sm: 0.9375rem;

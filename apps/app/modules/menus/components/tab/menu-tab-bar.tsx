@@ -13,7 +13,7 @@ function MenuTabBar() {
   return (
     <ScrollArea className='-my-2.5 grid'>
       <nav className='px-1 py-2.5'>
-        <ul className='flex items-center gap-x-2.5'>
+        <ul className='flex items-center gap-x-6'>
           {MENU_TAB_BAR_ROUTES.map((route) => (
             <li key={route.label}>
               <MenuButton isActive={route.href(businessId, branchId, menuId) === pathname} asChild>

@@ -15,7 +15,7 @@ function PreviewImagesList({ multiple = true, images, addImage, removeImage }: P
   return (
     <div className='flex flex-wrap items-center gap-x-3 gap-y-1.5'>
       {images.map((image, index) => (
-        <PreviewImageCard key={crypto.randomUUID()} image={image} removeImage={() => removeImage(index)} />
+        <PreviewImageCard key={index} image={image} removeImage={() => removeImage(index)} />
       ))}
       {multiple && (
         <Button

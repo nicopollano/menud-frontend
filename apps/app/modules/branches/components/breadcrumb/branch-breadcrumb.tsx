@@ -53,17 +53,26 @@ function BranchBreadcrumb() {
   })
 
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
+    <Breadcrumb className='py-4'>
+      <BreadcrumbList className='gap-2 sm:gap-2'>
         <BreadcrumbItem>
           {isLoadingBusiness && <Skeleton className='min-h-5 min-w-24' />}
-          {business?.name && <BreadcrumbPage>{business?.name}</BreadcrumbPage>}
+          {business?.name && (
+            <BreadcrumbPage className='font-semibold text-neutral-900'>
+              {business?.name}
+            </BreadcrumbPage>
+          )}
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <BreadcrumbPage>
             <BreadcrumbLink asChild>
-              <Link href={ROUTES.BUSINESS_BRANCHES(businessId)}>Sucursales</Link>
+              <Link 
+                href={ROUTES.BUSINESS_BRANCHES(businessId)}
+                className='text-neutral-500 hover:text-neutral-900 transition-colors'
+              >
+                Sucursales
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbPage>
         </BreadcrumbItem>
@@ -72,27 +81,33 @@ function BranchBreadcrumb() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <DropdownMenu>
-                {isLoadingBranch && <Skeleton className='min-h-5 min-w-20' />}
+                {isLoadingBranch && <Skeleton className='min-h-8 min-w-32 rounded-full' />}
                 {branch?.name && (
                   <DropdownMenuTrigger
                     className={cn(
-                      'flex items-center text-body-mobile-3 text-text [&>svg]:size-5 [&>svg]:stroke-text',
-                      menuId && 'text-gray-dark [&>svg]:stroke-gray-dark'
+                      'flex items-center gap-1.5 h-8 px-3 rounded-full',
+                      'bg-white border border-neutral-200',
+                      'text-sm font-medium text-neutral-700',
+                      'shadow-sm hover:shadow hover:bg-neutral-50 hover:border-neutral-300',
+                      'transition-all duration-200 outline-none focus:ring-2 focus:ring-primary-100',
+                      '[&>svg]:size-4 [&>svg]:text-neutral-400',
+                      menuId && 'text-neutral-600 bg-neutral-50'
                     )}
                   >
                     {branch.name} <ArrowDownIcon />
                   </DropdownMenuTrigger>
                 )}
-                <DropdownMenuContent className='bg-background' align='start'>
-                  {isLoadingBranches && 'Cargando sucursales...'}
-                  {!isLoadingBranches && !branches?.length && 'Sin sucursales'}
+                <DropdownMenuContent className='bg-white p-1 shadow-lg border-neutral-100 rounded-xl min-w-[200px]' align='start'>
+                  {isLoadingBranches && <div className="p-2 text-sm text-neutral-500">Cargando...</div>}
+                  {!isLoadingBranches && !branches?.length && <div className="p-2 text-sm text-neutral-500">Sin sucursales</div>}
                   {branches?.map((branch) => (
                     <DropdownMenuItem key={branch.id} asChild>
-                      <BreadcrumbLink asChild>
-                        <Link href={ROUTES.BRANCH_MENUS(businessId, branch.id)} className='cursor-pointer'>
-                          {branch.name}
-                        </Link>
-                      </BreadcrumbLink>
+                      <Link 
+                        href={ROUTES.BRANCH_MENUS(businessId, branch.id)} 
+                        className='cursor-pointer rounded-lg px-3 py-2 text-sm hover:bg-neutral-50 focus:bg-neutral-50'
+                      >
+                        {branch.name}
+                      </Link>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -105,22 +120,32 @@ function BranchBreadcrumb() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <DropdownMenu>
-                {isLoadingMenu && <Skeleton className='min-h-5 min-w-20' />}
+                {isLoadingMenu && <Skeleton className='min-h-8 min-w-32 rounded-full' />}
                 {menu?.name && (
-                  <DropdownMenuTrigger className='flex items-center text-body-mobile-3 text-text [&>svg]:size-5 [&>svg]:stroke-text'>
+                  <DropdownMenuTrigger 
+                    className={cn(
+                      'flex items-center gap-1.5 h-8 px-3 rounded-full',
+                      'bg-white border border-neutral-200',
+                      'text-sm font-semibold text-neutral-900', // Current active item bolder
+                      'shadow-sm hover:shadow hover:bg-neutral-50 hover:border-neutral-300',
+                      'transition-all duration-200 outline-none focus:ring-2 focus:ring-primary-100',
+                      '[&>svg]:size-4 [&>svg]:text-neutral-400'
+                    )}
+                  >
                     {menu.name} <ArrowDownIcon />
                   </DropdownMenuTrigger>
                 )}
-                <DropdownMenuContent className='bg-background' align='start'>
-                  {isLoadingMenus && 'Cargando menús...'}
-                  {!isLoadingMenus && !menus?.length && 'Sin menús'}
+                <DropdownMenuContent className='bg-white p-1 shadow-lg border-neutral-100 rounded-xl min-w-[200px]' align='start'>
+                  {isLoadingMenus && <div className="p-2 text-sm text-neutral-500">Cargando...</div>}
+                  {!isLoadingMenus && !menus?.length && <div className="p-2 text-sm text-neutral-500">Sin menús</div>}
                   {menus?.map((menu) => (
                     <DropdownMenuItem key={menu.id} asChild>
-                      <BreadcrumbLink asChild>
-                        <Link href={ROUTES.BRANCH_MENU(businessId, branchId, menu.id)} className='cursor-pointer'>
-                          {menu.name}
-                        </Link>
-                      </BreadcrumbLink>
+                      <Link 
+                        href={ROUTES.BRANCH_MENU(businessId, branchId, menu.id)} 
+                        className='cursor-pointer rounded-lg px-3 py-2 text-sm hover:bg-neutral-50 focus:bg-neutral-50'
+                      >
+                        {menu.name}
+                      </Link>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
